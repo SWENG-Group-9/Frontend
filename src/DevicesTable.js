@@ -11,12 +11,13 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
     maxWidth: 360,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background,
   },
 }));
 
@@ -44,7 +45,10 @@ export default function DevicesTable() {
     </Fab>
     <List subheader={<ListSubheader>Devices</ListSubheader>} className={classes.root}>
       <ListItem>
-        <ListItemText id="switch-list-label-entrance" primary="Entrance" />
+        <ListItemText 
+        disableTypography
+        id="switch-list-label-entrance"
+        primary={<Typography variant="h4" style={{ color: '#1a535c' }}>Entrance</Typography>} />
         <ListItemSecondaryAction>
           <Switch
             edge="end"
@@ -59,7 +63,9 @@ export default function DevicesTable() {
         
       </ListItem>
       <ListItem>
-        <ListItemText id="switch-list-label-exit" primary="Exit" />
+        <ListItemText 
+        id="switch-list-label-exit" 
+        primary={<Typography variant="h4" style={{ color: '#1a535c' }}>Exit</Typography>} />
         <ListItemSecondaryAction>
             <Switch
                 edge="end"
