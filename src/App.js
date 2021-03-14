@@ -29,7 +29,7 @@ export default function App() {
           IoT-Powered Pandemic Safety Suite
         </Typography>
         <br />
-        <CapacityBar />
+        <CapacityBar value={10} max={22} />
         <br />
         <DevicesTable />
         <Copyright />
