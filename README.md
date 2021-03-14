@@ -22,7 +22,7 @@
 5. Running the server locally
 
    ```Shell Session
-   npm run dev
+   npm start
    ```
 
    The server should now be hosted on [http://localhost:3000](http://localhost:3000)
