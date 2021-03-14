@@ -1,12 +1,34 @@
-# Create React App example
+# IoT Pandemic Saftey Tools Frontend
 
-## How to use
-clone the repo
+[Project Roadmap](https://github.com/SWENG-Group-9/Frontend/projects/1)
 
-Install Nodejs and run:
+- [x] Boilerplate Code
+- [ ] Build components from Roadmap
+- [ ] Admin Authentication
+- [ ] Integrate with Device Backend
+- [ ] Write full documentation
 
-```sh
-npm install
-npm start
-```
+## Installation
 
+1. Install [Node.js](https://nodejs.org)
+2. Clone this repository
+3. Open up command prompt or teminal and navigate to the location of the cloned repository
+4. Install the dependencies
+
+   ```Shell Session
+   npm install
+   ```
+
+5. Running the server locally
+
+   ```Shell Session
+   npm run dev
+   ```
+
+   The server should now be hosted on [http://localhost:3000](http://localhost:3000)
+
+## Some Relevant Docs
+
+- [Node.js](https://nodejs.org/en/docs/)
+- [React](https://reactjs.org/docs/getting-started.html)
+- [Material UI](https://material-ui.com/)
