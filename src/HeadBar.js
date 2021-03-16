@@ -1,11 +1,14 @@
-import {AppBar, Toolbar, Typography, Button, IconButton} from "@material-ui/core";
+import {AppBar, Toolbar, Typography, Button, IconButton, Grid} from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
-import {AccountCircle} from '@material-ui/icons/';
+import {AccountCircle, Widgets} from '@material-ui/icons/';
 
 const useStyles = makeStyles({
     appBarStyle:{
         width:'100%',
         padding:5,
+        margin:0,
+        height:70,
+        
     },
     buttonStyle:{
         height:35,
@@ -15,7 +18,7 @@ const useStyles = makeStyles({
         fontSize:25,
         fontStyle:'oblique',
         fontWeight:'bold',
-        margin:10
+        margin:10,
     },
     buttonText:{
         fontSize:13,
@@ -25,20 +28,32 @@ const useStyles = makeStyles({
 export default function HeadBar() {
     const classes = useStyles();
     return(
-        <AppBar position="sticky" className={classes.appBarStyle}>
+        <AppBar position="static" className={classes.appBarStyle}>
             <Toolbar>
-                <Typography className ={classes.placeHolder} variant="h5" color="initial">
-                    Place Holder  
-                </Typography>
-                <Button color="secondary" variant="contained" disabled className={classes.buttonStyle}>
-                    <Typography className={classes.buttonText}>Manage Devices</Typography>
-                </Button>
-                <Button color="secondary" variant="contained" className={classes.buttonStyle}>
-                    <Typography className={classes.buttonText}>View Data</Typography>
-                </Button>
-                <IconButton aria-label="account-tab" className={classes.iconButton}>
-                    <AccountCircle/>
-                </IconButton>
+                <Grid container spacing={0}>
+                  <Grid item xs>
+                    <Typography className ={classes.placeHolder} variant="h5" color="initial">
+                            Place Holder Logo
+                    </Typography>
+                  </Grid>
+                  <Grid container spacing={0} xs={4}>
+                        <Grid item xs >
+                            <Button color="secondary" variant="contained" className={classes.buttonStyle}>
+                                <Typography className={classes.buttonText}>Manage Devices</Typography>
+                            </Button>
+                        </Grid>
+                        <Grid item xs >
+                            <Button color="secondary" variant="contained" className={classes.buttonStyle}>
+                                <Typography className={classes.buttonText}>View Data</Typography>
+                            </Button>
+                        </Grid>
+                        <Grid item xs={1} >
+                            <IconButton aria-label="account-tab" className={classes.iconButton}>
+                                    <AccountCircle size/>
+                            </IconButton>
+                         </Grid>
+                    </Grid>
+                </Grid>
             </Toolbar>
         </AppBar>
     );
