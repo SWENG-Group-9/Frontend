@@ -7,6 +7,7 @@ import DevicesTable from "./DevicesTable";
 import { withStyles } from "@material-ui/core/styles";
 import CapacityBar from "./CapacityBar";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import HeadBar from "./HeadBar"
 
 function Copyright() {
   return (
@@ -24,6 +25,7 @@ function Copyright() {
 export default function App() {
   return (
     <Container maxWidth="sm">
+      <HeadBar/>
       <Box my={4}>
         <Typography variant="h4" component="h1" gutterBottom>
           IoT-Powered Pandemic Safety Suite
