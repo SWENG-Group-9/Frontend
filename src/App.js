@@ -24,18 +24,20 @@ function Copyright() {
 
 export default function App() {
   return (
-    <Container maxWidth="sm">
+    <Container style={{padding:0}}>
       <HeadBar/>
-      <Box my={4}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          IoT-Powered Pandemic Safety Suite
-        </Typography>
-        <br />
-        <CapacityBar value={10} max={22} />
-        <br />
-        <DevicesTable />
-        <Copyright />
-      </Box>
-    </Container>
+      <Container maxWidth="sm">
+        <Box my={4}>
+          <Typography variant="h4" component="h1" gutterBottom>
+            IoT-Powered Pandemic Safety Suite
+          </Typography>
+          <br />
+          <CapacityBar value={10} max={22} />
+          <br />
+          <DevicesTable />
+          <Copyright />
+        </Box>
+      </Container>
+    </Container> 
   );
 }
