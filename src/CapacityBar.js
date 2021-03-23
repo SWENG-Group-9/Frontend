@@ -7,7 +7,7 @@ const normalise = (value, max) => (value * 100) / max;
 
 const NormalLinearProgress = withStyles((theme) => ({
   root: {
-    height: 10,
+    height: 35,
   },
 }))(LinearProgress);
 
