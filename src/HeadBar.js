@@ -1,6 +1,7 @@
 import {AppBar, Toolbar, Typography, Button, IconButton, Grid} from "@material-ui/core";
 import {makeStyles} from "@material-ui/styles";
 import {AccountCircle, Widgets} from '@material-ui/icons/';
+import {Link as RouterLink} from 'react-router-dom';
 
 const useStyles = makeStyles((theme)=>({
     appBarStyle:{
@@ -53,12 +54,14 @@ export default function HeadBar() {
                     </Grid>
                     <Grid container spacing={0} xs={4}>
                         <Grid item xs >
-                            <Button color="secondary" variant="contained" className={classes.buttonStyle}>
-                                <Typography className={classes.buttonText}>Manage Devices</Typography>
+                            <Button component={RouterLink} to='/' color="secondary" variant="contained" className={classes.buttonStyle}>
+                                <Typography className={classes.buttonText}>
+                                    Manage Devices
+                                </Typography>
                             </Button>
                         </Grid>
                         <Grid item xs>
-                            <Button color="secondary" variant="contained" className={classes.buttonStyle}>
+                            <Button component={RouterLink} to='/statistics' color="secondary" variant="contained" className={classes.buttonStyle}>
                                 <Typography className={classes.buttonText}>View Data</Typography>
                             </Button>
                         </Grid>
