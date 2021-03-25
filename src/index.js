@@ -6,6 +6,7 @@ import App from './App';
 import AppStatistics from './AppStatistics';
 import theme from './theme';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import HeadBar from './HeadBar'
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>
@@ -14,9 +15,11 @@ ReactDOM.render(
     <BrowserRouter>
       <Switch>
         <Route exact path="/">
+          <HeadBar/>
           <App/>
         </Route>
         <Route exact path="/statistics">
+          <HeadBar/>
           <AppStatistics/>
         </Route>
       </Switch>
