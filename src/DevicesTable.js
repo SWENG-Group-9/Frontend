@@ -18,6 +18,13 @@ import Paper from "@material-ui/core/Paper";
 import Popper from "@material-ui/core/Popper";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuList from "@material-ui/core/MenuList";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,6 +37,15 @@ export default function DevicesTable() {
   const classes = useStyles();
   const [locked, setLocked] = React.useState(["locked"]);
   const [open, setOpen] = React.useState(false);
+  const [addOpen, setAddOpen] = React.useState(false);
+
+  const handleClickAddOpen = () => {
+    setAddOpen(true);
+  };
+
+  const handleAddClose = () => {
+    setAddOpen(false);
+  };
 
   const handleLock = (value) => () => {
     const currentIndex = locked.indexOf(value);
@@ -85,10 +101,40 @@ export default function DevicesTable() {
         </Box>
         <Box>
           <Fab color="primary" aria-label="add">
-            <AddIcon />
+            <AddIcon onClick={handleClickAddOpen} />
           </Fab>
         </Box>
       </Box>
+
+      <Dialog
+        open={addOpen}
+        onClose={handleAddClose}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">Add Device</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            To add a device to your system. Please provide the device name:
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="deviceName"
+            label="Device Name"
+            type="text"
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleAddClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleAddClose} color="primary">
+            Add
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Box flexGrow={1}>
         <List className={classes.root}>
           <ListItem>
