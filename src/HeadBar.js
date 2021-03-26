@@ -13,10 +13,12 @@ const useStyles = makeStyles((theme)=>({
         height:35,
         margin:10,
         [theme.breakpoints.up('xs')]: {
-            width:100
+            width:100,
+            height:40
         },
         [theme.breakpoints.up('md')]: {
-            width:130
+            width:130,
+            height:35
         },
         [theme.breakpoints.up('lg')]: {
             width:150,
@@ -29,15 +31,8 @@ const useStyles = makeStyles((theme)=>({
         margin:10,
     },
     buttonText:{
-        [theme.breakpoints.up('xs')]: {
-            fontSize:10
-        },
-        [theme.breakpoints.up('md')]: {
-            fontSize:11
-        },
-        [theme.breakpoints.up('lg')]: {
-            fontSize:13
-        },
+        textAlign:"center",
+        fontSize:12
     }
 })); 
 
@@ -52,18 +47,20 @@ export default function HeadBar() {
                             Place Holder Logo
                         </Typography>
                     </Grid>
-                    <Grid container spacing={0} xs={4}>
-                        <Grid item xs >
-                            <Button component={RouterLink} to='/' color="secondary" variant="contained" className={classes.buttonStyle}>
-                                <Typography className={classes.buttonText}>
-                                    Manage Devices
-                                </Typography>
-                            </Button>
-                        </Grid>
-                        <Grid item xs>
-                            <Button component={RouterLink} to='/statistics' color="secondary" variant="contained" className={classes.buttonStyle}>
-                                <Typography className={classes.buttonText}>View Data</Typography>
-                            </Button>
+                    <Grid item xs={4}>
+                        <Grid container spacing={0} >
+                            <Grid item xs >
+                                <Button component={RouterLink} to='/' color="secondary" variant="contained" className={classes.buttonStyle}>
+                                    <Typography className={classes.buttonText}>
+                                        Manage Devices
+                                    </Typography>
+                                </Button>
+                            </Grid>
+                            <Grid item xs>
+                                <Button component={RouterLink} to='/statistics' color="secondary" variant="contained" className={classes.buttonStyle}>
+                                    <Typography className={classes.buttonText}>View Data</Typography>
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Grid>
                     <Grid item xs={1}>
