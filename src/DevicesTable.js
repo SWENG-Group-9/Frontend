@@ -26,11 +26,19 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DevicesTable() {
   const classes = useStyles();
-  let locked = true;
+  const [locked, setLocked] = React.useState(["locked"]);
 
   const handleLock = (value) => () => {
-    locked = !locked;
-    console.log(locked);
+    const currentIndex = locked.indexOf(value);
+    const newLock = [...locked];
+
+    if (currentIndex === -1) {
+      newLock.push(value);
+    } else {
+      newLock.splice(currentIndex, 1);
+    }
+
+    setLocked(newLock);
   };
 
   return (
@@ -65,8 +73,16 @@ export default function DevicesTable() {
               }
             />
             <ListItemSecondaryAction>
-              <IconButton edge="end" aria-label="LockIcon" onClick={handleLock}>
-                {locked ? <LockOutlinedIcon /> : <LockOpenOutlinedIcon />}
+              <IconButton
+                edge="end"
+                aria-label="LockIcon"
+                onClick={handleLock("1")}
+              >
+                {locked.indexOf("1") !== -1 ? (
+                  <LockOutlinedIcon />
+                ) : (
+                  <LockOpenOutlinedIcon />
+                )}
               </IconButton>
               <IconButton edge="end" aria-label="MoreVertIcon">
                 <MoreVertIcon />
