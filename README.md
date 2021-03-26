@@ -3,7 +3,7 @@
 [Project Roadmap](https://github.com/SWENG-Group-9/Frontend/projects/1)
 
 - [x] Boilerplate Code
-- [ ] Build components from Roadmap
+- [x] Build components from Roadmap
 - [ ] Admin Authentication
 - [ ] Integrate with Device Backend
 - [ ] Write full documentation
