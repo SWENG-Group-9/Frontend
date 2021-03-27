@@ -1,4 +1,4 @@
-import { Container, Grid, Button, ButtonGroup, Typography} from "@material-ui/core";
+import { Container, Grid, Button, ButtonGroup, Typography, TextField} from "@material-ui/core";
 import {useState, Effect, useEffect} from 'react';
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -29,6 +29,9 @@ export default function ChartControl({setPeriods}){
     const classes = useStyles();
     const periodChoices = ["30 Minutes", "1 Hour", "2 Hours", "3 Hours"];
     const [periodValue, setPeriodValue] = useState([0,"30 Minutes"]);
+    const [startTime, setStartTime] = useState("00:00");
+    const [endTime, setEndTime] = useState("07:00");
+    const [dataDate, setDataDate] = useState("01/01/2021");
 
     const setPeriod = () => {
         let index = periodValue[0];
@@ -42,9 +45,8 @@ export default function ChartControl({setPeriods}){
     }
 
     useEffect(()=>{
-        console.log(periodValue);
-        setPeriods(periodValue[1])
-    },[periodValue])
+        setPeriods(periodValue[1],dataDate, startTime,endTime)
+    },[periodValue, dataDate, startTime, endTime])
 
 
     return(
@@ -57,11 +59,34 @@ export default function ChartControl({setPeriods}){
                             {periodValue[1]}
                         </Typography>
                     </Grid>
-                    <Grid item>
-                        <ButtonGroup variant="outlined" color="secondary" aria-label="scope-chioce">
-                          <Button className={classes.buttonStyle}>Start</Button>
-                          <Button className={classes.buttonStyle}>End</Button>
-                        </ButtonGroup>
+                    <Grid style={{paddingLeft:40}} container spacing={4}>
+                        <Grid item xs>
+                            <TextField
+                                value={startTime}
+                                onChange={(e) => setStartTime(e.target.value)}
+                                label="Start"
+                                type="time"
+                                InputLabelProps={{
+                                shrink: true,
+                            }}/>
+                        </Grid>
+                        <Grid item xs>
+                            <TextField
+                                value={endTime}
+                                onChange={(e) => setEndTime(e.target.value)}
+                                label="End"
+                                type="time"
+                                InputLabelProps={{
+                                shrink: true,
+                            }}/>
+                        </Grid>
+                        <Grid item xs>
+                            {(startTime>endTime)&&
+                                <Typography variant="h5" color="initial">
+                                    This date selection is invalid
+                                </Typography>
+                            }
+                        </Grid>
                     </Grid>
             </Grid>
         </Container>

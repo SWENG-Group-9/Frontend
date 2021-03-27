@@ -1,4 +1,4 @@
-import { Container, Grid, Button } from '@material-ui/core'
+import { Container, Grid, Button, Typography } from '@material-ui/core'
 import React from 'react';
 import {Bar, Line} from 'react-chartjs-2'
 
@@ -9,7 +9,7 @@ export default function StatCharts({values, times}){
     return (
         <Container style={{paddingLeft:0}}>   
             <Container >
-                <Bar 
+                {(values.length!=0)&&<Bar 
                     height={450}
                     data={{
                         labels:times,
@@ -34,7 +34,10 @@ export default function StatCharts({values, times}){
                             }]
                         }
                     }}
-                />
+                />}
+                {(values.length==0) && <Typography variant="h3" color="secondary" align="center">
+                                            There is no Data for This Period       
+                                         </Typography>}
             </Container>
         </Container>
     )
