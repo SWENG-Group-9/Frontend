@@ -4,7 +4,7 @@ import {Bar, Line} from 'react-chartjs-2'
 
 
 
-export default function StatCharts({times}){
+export default function StatCharts({values, times}){
      
     return (
         <Container style={{paddingLeft:0}}>   
@@ -15,7 +15,7 @@ export default function StatCharts({times}){
                         labels:times,
                         datasets:[{
                             label: 'Number of People',
-                            data: [12,15,16,16,17,86,92],
+                            data: values,
                             backgroundColor:'#4ecdc4',
                             borderColor:'crimson'
 

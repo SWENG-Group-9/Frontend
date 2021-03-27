@@ -6,26 +6,61 @@ import StatCharts from './StatCharts'
 
 
 export default function AppStatistics(){
-    const [times, setTimes] = useState(['12am','1am','2am','3am','4am','5am','6am']);  
+    const [times, setTimes] = useState([]); 
+    const [values, setValues] = useState([]);
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        getPeriodDataValues();
+    },[data])
+
+    function fetchData(mode){
+    
+        fetch("http://localhost:8000/data").then(
+            (resp) => {
+                return resp.json();
+            }
+        ).then(
+            (rawData) => {
+                switch(mode){
+                    case 1:
+                        setData(rawData);
+                        break;
+                    case 2:
+                        setData(rawData.filter(obj => obj.time.substring(3, 5) == "00"));
+                        break;
+                    case 3:
+                        setData(rawData.filter(obj => obj.time.substring(3, 5) == "00" 
+                                && obj.time.substring(0,2) % 2 == 0));
+                        break;
+                    case 4:
+                        setData(rawData.filter(obj => obj.time.substring(3, 5) == "00" 
+                                && obj.time.substring(0,2) % 3 == 0));
+                        break;
+                    default:
+                        setData(rawData);
+                }
+            }
+        )
+    }
 
     function getPeriodDataValues(periodVal){
         switch(periodVal){
-            case "One Hour":
-                setTimes(['12am','1am','2am','3am','4am','5am','6am']);
+            case "30 Minutes":
+                fetchData(1);
                 break;
-            case "Two Hours":
-                setTimes(['12am','2am','4am','6am','8am','10am','12pm']);
+            case "1 Hour":
+                fetchData(2);
                 break;
-            case "Six Hours":
-                setTimes(['12am','6am','12pm','6pm','12am','6am','12pm']);
+            case "2 Hours":
+                fetchData(3);
                 break;
-            case "One Day":
-                setTimes(['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']);
+            case "3 Hours":
+                fetchData(4);
                 break;
-            default:
-                setTimes(['12am','1am','2am','3am','4am','5am','6am']);
-    
         }
+        setValues(data.map(obj => obj.value))
+        setTimes(data.map(obj => obj.time));
     }
 
 
@@ -36,7 +71,7 @@ export default function AppStatistics(){
                     <ChartControl setPeriods={getPeriodDataValues}/>
                 </Grid>
                 <Grid item xs={8} sm={8}>
-                    <StatCharts times={times} />
+                    <StatCharts values={values} times={times} />
                 </Grid>
             </Grid>
         </Container>

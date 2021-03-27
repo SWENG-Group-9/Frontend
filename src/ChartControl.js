@@ -27,8 +27,8 @@ const useStyles = makeStyles((theme)=>({
 
 export default function ChartControl({setPeriods}){
     const classes = useStyles();
-    const periodChoices = ["One Hour", "Two Hours", "Six Hours", "One Day"];
-    const [periodValue, setPeriodValue] = useState([0,"One Hour"]);
+    const periodChoices = ["30 Minutes", "1 Hour", "2 Hours", "3 Hours"];
+    const [periodValue, setPeriodValue] = useState([0,"30 Minutes"]);
 
     const setPeriod = () => {
         let index = periodValue[0];
