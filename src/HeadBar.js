@@ -65,7 +65,7 @@ export default function HeadBar() {
                     </Grid>
                     <Grid item xs={1}>
                         <IconButton aria-label="account-tab" className={classes.iconButton}>
-                            <AccountCircle size/>
+                            <AccountCircle />
                         </IconButton>
                     </Grid>
                 </Grid>

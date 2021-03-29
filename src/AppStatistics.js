@@ -1,6 +1,5 @@
 import { Container , Grid} from '@material-ui/core'
-import {useState, useEffect} from 'react';
-import Typography from '@material-ui/core/Typography'
+import {useState, useEffect} from 'react'
 import ChartControl from './ChartControl'
 import StatCharts from './StatCharts'
 
@@ -9,69 +8,93 @@ export default function AppStatistics(){
     const [times, setTimes] = useState([]); 
     const [values, setValues] = useState([]);
     const [data, setData] = useState([]);
+    const [found, setFound] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [dateL, setDateL] = useState("");
 
     useEffect(() => {
         getPeriodDataValues();
-    },[data])
+    },[loading])
 
-    function fetchData(mode){
-    
-        fetch("http://localhost:8000/data").then(
+    function fetchData(mode, date, start, end){
+        setLoading(true);
+        setDateL(date);
+        fetch("http://localhost:8000/"+date)
+        .then(
             (resp) => {
-                return resp.json();
-            }
-        ).then(
-            (rawData) => {
-                switch(mode){
-                    case 1:
-                        setData(rawData);
-                        break;
-                    case 2:
-                        setData(rawData.filter(obj => obj.time.substring(3, 5) == "00"));
-                        break;
-                    case 3:
-                        setData(rawData.filter(obj => obj.time.substring(3, 5) == "00" 
-                                && obj.time.substring(0,2) % 2 == 0));
-                        break;
-                    case 4:
-                        setData(rawData.filter(obj => obj.time.substring(3, 5) == "00" 
-                                && obj.time.substring(0,2) % 3 == 0));
-                        break;
-                    default:
-                        setData(rawData);
+                if(!resp.ok){
+                    setFound(false);
+                    throw Error("Could not find data for this period");
                 }
-            }
-        )
+                return resp.json();
+        })
+        .then(
+            (rawData) => {
+                let dateS = date.split("-")
+                let startS = start.split(":")
+                let endS = end.split(":")
+                for (let i = 0;i<2;i++){
+                    dateS[i]= parseInt(dateS[i])
+                    startS[i]= parseInt(startS[i])
+                    endS[i]= parseInt(endS[i])
+                }
+
+                startS[1] = Math.ceil(startS[1] / 30) * 30;
+
+                let timesar=[];
+                let time = new Date(dateS[0], dateS[1], dateS[2], startS[0], startS[1]);
+                let endT = new Date(dateS[0], dateS[1], dateS[2], endS[0], endS[1], 1);
+
+                while(time < endT){
+                    timesar.push(("0"+time.getHours()).slice(-2)+":"+("0"+time.getMinutes()).slice(-2)); 
+                    time.setMinutes(time.getMinutes()+mode)   
+                }
+
+                let dataobj = []
+                timesar.forEach((item)=>{
+                    let val = rawData.find((ob) => item ==ob.time)
+                    if(val!=undefined){
+                        dataobj.push(val)
+                    }
+                });
+                setData(dataobj)
+                setFound(true);
+                setLoading(false);
+        })
+        .catch((err) => {
+            console.log(err.message)
+            setLoading(false);
+        })
     }
 
-    function getPeriodDataValues(periodVal){
+
+    function getPeriodDataValues(periodVal, date, start, end){
         switch(periodVal){
             case "30 Minutes":
-                fetchData(1);
+                fetchData(30, date, start, end);
                 break;
             case "1 Hour":
-                fetchData(2);
+                fetchData(60, date, start, end);
                 break;
             case "2 Hours":
-                fetchData(3);
+                fetchData(120, date, start, end);
                 break;
             case "3 Hours":
-                fetchData(4);
+                fetchData(180, date, start, end);
                 break;
         }
         setValues(data.map(obj => obj.value))
         setTimes(data.map(obj => obj.time));
     }
 
-
     return (
         <Container style={{padding:0}}>
             <Grid style={{paddingTop:30}} container spacing={1}>
-                <Grid item xs={4} sm={3}>
-                    <ChartControl setPeriods={getPeriodDataValues}/>
+                <Grid item xs={4} md={3}>
+                    <ChartControl  setPeriods={getPeriodDataValues}/>
                 </Grid>
                 <Grid item xs={8} sm={8}>
-                    <StatCharts values={values} times={times} />
+                    <StatCharts loading={loading} date={dateL} found={found} values={values} times={times}/>
                 </Grid>
             </Grid>
         </Container>
