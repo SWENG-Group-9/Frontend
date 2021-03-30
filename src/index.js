@@ -8,6 +8,8 @@ import theme from "./theme";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import HeadBar from "./HeadBar";
 import PublicView from "./PublicView";
+import Login from "./Login";
+import Signup from "./Signup";
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>
@@ -25,6 +27,14 @@ ReactDOM.render(
         </Route>
         <Route exact path="/public">
           <PublicView />
+        </Route>
+        <Route exact path="/login">
+          <HeadBar />
+          <Login />
+        </Route>
+        <Route exact path="/signup">
+          <HeadBar />
+          <Signup />
         </Route>
       </Switch>
     </BrowserRouter>
