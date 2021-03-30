@@ -2,6 +2,7 @@ import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 
 const normalise = (value, max) => (value * 100) / max;
 
@@ -37,7 +38,7 @@ function CapacityBar(props) {
   }
 
   return (
-    <React.Fragment>
+    <Box position="relative">
       {status === "normal" && (
         <NormalLinearProgress variant="determinate" value={normValue} />
       )}
@@ -47,10 +48,25 @@ function CapacityBar(props) {
       {status === "error" && (
         <ErrorLinearProgres variant="determinate" value={normValue} />
       )}
-      <Typography variant="subtitle1" component="subtitle1">
-        {props.value}/{props.max}
-      </Typography>
-    </React.Fragment>
+      <Box
+        top={0}
+        left={0}
+        bottom={0}
+        right={0}
+        position="absolute"
+        display="flex"
+        alignItems="center"
+        justifyContent="flex-end"
+      >
+        <Typography
+          variant="subtitle1"
+          component="subtitle1"
+          style={{ padding: "10px" }}
+        >
+          {props.value}/{props.max}
+        </Typography>
+      </Box>
+    </Box>
   );
 }
 
