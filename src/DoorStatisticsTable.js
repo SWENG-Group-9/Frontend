@@ -29,11 +29,8 @@ function createData(name, data) {
 }
 
 const rows = [
-  createData('Busiest Day of Week',  "Tuesday"),
-  createData('Most Customers in 1 Day',  247),
-  createData('Busiest Time of Day', "18:00"),
-  createData('Quietest Period of day',"07:00"),
-  createData('Average Number of Customers per Day',178),
+  createData('Door Health Rating',  4,),
+  createData('Average Devices in Use Daily',  2),
 ];
 
 const useStyles = makeStyles({
