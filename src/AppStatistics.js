@@ -2,6 +2,8 @@ import { Container , Grid} from '@material-ui/core'
 import {useState, useEffect} from 'react'
 import ChartControl from './ChartControl'
 import StatCharts from './StatCharts'
+import SummaryStatsTable from './SummaryStatsTable'
+import DoorStatisticsTable from './DoorStatisticsTable'
 
 
 export default function AppStatistics(){
@@ -88,13 +90,19 @@ export default function AppStatistics(){
     }
 
     return (
-        <Container style={{padding:0}}>
-            <Grid style={{paddingTop:30}} container spacing={1}>
+        <Container style={{padding:0}} spacing={20}>
+            <Grid style={{paddingTop:30}} container spacing={10}>
                 <Grid item xs={4} md={3}>
                     <ChartControl  setPeriods={getPeriodDataValues}/>
                 </Grid>
-                <Grid item xs={8} sm={8}>
+                <Grid item xs={8} sm={8}spacing={1}>
                     <StatCharts loading={loading} date={dateL} found={found} values={values} times={times}/>
+                </Grid>
+                <Grid item xs={5} sm={5} container spacing={40}>
+                    <SummaryStatsTable />
+                </Grid>
+                <Grid item xs={6} sm={6} container spacing={40}>
+                    <DoorStatisticsTable  />
                 </Grid>
             </Grid>
         </Container>
