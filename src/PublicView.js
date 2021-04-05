@@ -47,7 +47,7 @@ export default function PublicView() {
             align="center"
             fontWeight="fontWeightBold"
           >
-            54
+            11
           </PrimaryTypography>
           <WhiteTypography
             variant="h2"
