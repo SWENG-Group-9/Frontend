@@ -25,6 +25,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
+import Select from "@material-ui/core/Select";
+import InputLabel from "@material-ui/core/InputLabel";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,11 +35,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const tempDevices = [
+  {
+    name: "Front door",
+    type: "Entrance",
+  },
+  {
+    name: "Back door",
+    type: "Exit",
+  },
+];
+
 export default function DevicesTable() {
   const classes = useStyles();
   const [locked, setLocked] = React.useState(["locked"]);
   const [open, setOpen] = React.useState(false);
   const [addOpen, setAddOpen] = React.useState(false);
+  const [type, setType] = React.useState("");
+
+  const hadleTypeChange = (event) => {
+    setType(event.target.value);
+  };
 
   const handleClickAddOpen = () => {
     setAddOpen(true);
@@ -124,6 +142,18 @@ export default function DevicesTable() {
             type="text"
             fullWidth
           />
+          <TextField
+            id="entranceType"
+            select
+            label="Entrance Type"
+            value={type}
+            onChange={hadleTypeChange}
+            fullWidth
+          >
+            <MenuItem value={"Entrance"}>Entrance</MenuItem>
+            <MenuItem value={"Exit"}>Exit</MenuItem>
+            <MenuItem value={"Both"}>Both</MenuItem>
+          </TextField>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleAddClose} color="primary">
@@ -137,82 +167,84 @@ export default function DevicesTable() {
 
       <Box flexGrow={1}>
         <List className={classes.root}>
-          <ListItem>
-            <ListItemText
-              disableTypography
-              id="switch-list-label-entrance"
-              primary={
-                <Typography variant="h4" style={{ color: "#1a535c" }}>
-                  Frontdoor
-                </Typography>
-              }
-              secondary={
-                <Typography variant="h6" style={{ color: "#1a535c" }}>
-                  Entrance
-                </Typography>
-              }
-            />
-            <ListItemSecondaryAction>
-              <IconButton
-                edge="end"
-                aria-label="LockIcon"
-                onClick={handleLock("1")}
-              >
-                {locked.indexOf("1") !== -1 ? (
-                  <LockOutlinedIcon />
-                ) : (
-                  <LockOpenOutlinedIcon />
-                )}
-              </IconButton>
-              <IconButton
-                edge="end"
-                aria-label="MoreVertIcon"
-                aria-haspopup="true"
-                aria-controls={open ? "menu-list-grow" : undefined}
-                onClick={handleOpen}
-                ref={anchorRef}
-              >
-                <MoreVertIcon />
-                <Popper
-                  open={open}
-                  anchorEl={anchorRef.current}
-                  role={undefined}
-                  transition
-                  disablePortal
-                  placement="right"
+          {tempDevices.map((device) => (
+            <ListItem>
+              <ListItemText
+                disableTypography
+                id="switch-list-label-entrance"
+                primary={
+                  <Typography variant="h4" style={{ color: "#1a535c" }}>
+                    {device.name}
+                  </Typography>
+                }
+                secondary={
+                  <Typography variant="h6" style={{ color: "#1a535c" }}>
+                    {device.type}
+                  </Typography>
+                }
+              />
+              <ListItemSecondaryAction>
+                <IconButton
+                  edge="end"
+                  aria-label="LockIcon"
+                  onClick={handleLock("1")}
                 >
-                  {({ TransitionProps, placement }) => (
-                    <Grow
-                      {...TransitionProps}
-                      style={{
-                        transformOrigin:
-                          placement === "bottom"
-                            ? "center top"
-                            : "center bottom",
-                      }}
-                    >
-                      <Paper>
-                        <ClickAwayListener onClickAway={handleClose}>
-                          <MenuList
-                            autoFocusItem={open}
-                            id="menu-list-grow"
-                            onKeyDown={handleListKeyDown}
-                          >
-                            <MenuItem onClick={handleClose}>
-                              Manage Device
-                            </MenuItem>
-                            <MenuItem onClick={handleClose}>
-                              Door Statistics
-                            </MenuItem>
-                          </MenuList>
-                        </ClickAwayListener>
-                      </Paper>
-                    </Grow>
+                  {locked.indexOf("1") !== -1 ? (
+                    <LockOutlinedIcon />
+                  ) : (
+                    <LockOpenOutlinedIcon />
                   )}
-                </Popper>
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
+                </IconButton>
+                <IconButton
+                  edge="end"
+                  aria-label="MoreVertIcon"
+                  aria-haspopup="true"
+                  aria-controls={open ? "menu-list-grow" : undefined}
+                  onClick={handleOpen}
+                  ref={anchorRef}
+                >
+                  <MoreVertIcon />
+                  <Popper
+                    open={open}
+                    anchorEl={anchorRef.current}
+                    role={undefined}
+                    transition
+                    disablePortal
+                    placement="right"
+                  >
+                    {({ TransitionProps, placement }) => (
+                      <Grow
+                        {...TransitionProps}
+                        style={{
+                          transformOrigin:
+                            placement === "bottom"
+                              ? "center top"
+                              : "center bottom",
+                        }}
+                      >
+                        <Paper>
+                          <ClickAwayListener onClickAway={handleClose}>
+                            <MenuList
+                              autoFocusItem={open}
+                              id="menu-list-grow"
+                              onKeyDown={handleListKeyDown}
+                            >
+                              <MenuItem onClick={handleClose}>
+                                Manage Device
+                              </MenuItem>
+                              <MenuItem onClick={handleClose}>
+                                Door Statistics
+                              </MenuItem>
+                            </MenuList>
+                          </ClickAwayListener>
+                        </Paper>
+                      </Grow>
+                    )}
+                  </Popper>
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
+          ))}
         </List>
       </Box>
     </>
