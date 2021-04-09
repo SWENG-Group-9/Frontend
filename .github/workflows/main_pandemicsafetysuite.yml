@@ -35,5 +35,5 @@ jobs:
         app-name: PandemicSafetySuite
         slot-name: Production
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_55C11198838D49E5B138D378B2581868 }}
-        package: .
+        package: './build'
 
