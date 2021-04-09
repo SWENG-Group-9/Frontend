@@ -29,8 +29,10 @@ function createData(name, data) {
 }
 
 const rows = [
-  createData('Door Health Rating',  4,),
-  createData('Average Devices in Use Daily',  2),
+  createData('Doors in use',  2),
+  createData('Locked Doors',  2),
+  createData('Unlocked Doors in use',  2),
+  createData('Automatic Queing System in Use',  'Yes'),
 ];
 
 const useStyles = makeStyles({

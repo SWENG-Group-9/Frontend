@@ -22,6 +22,7 @@
 5. Running the server locally
 
    ```Shell Session
+   npx json-server --watch data.json --port 8000
    npm start
    ```
 
