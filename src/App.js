@@ -6,6 +6,7 @@ import Link from "@material-ui/core/Link";
 import DevicesTable from "./DevicesTable";
 import { withStyles } from "@material-ui/core/styles";
 import CapacityBar from "./CapacityBar";
+import ImplementQueingPolicy from "./ImplementQueueingPolicy"
 import LinearProgress from "@material-ui/core/LinearProgress";
 import HeadBar from "./HeadBar"
 
@@ -31,8 +32,10 @@ export default function App() {
             IoT-Powered Pandemic Safety Suite
           </Typography>
           <br />
-          <CapacityBar value={10} max={22} />
-          <br />
+          <CapacityBar value={10} max={22} /><br/>
+          <ImplementQueingPolicy />
+          <br/>
+          <br/>
           <DevicesTable />
           <Copyright />
         </Box>
