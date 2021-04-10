@@ -6,6 +6,8 @@ import {
   IconButton,
   Grid,
 } from "@material-ui/core";
+import SvgIcon from "@material-ui/core/SvgIcon";
+import { ReactComponent as Logo } from "./logo.svg";
 import { makeStyles } from "@material-ui/styles";
 import { AccountCircle, Widgets } from "@material-ui/icons/";
 import { Link as RouterLink } from "react-router-dom";
@@ -31,11 +33,8 @@ const useStyles = makeStyles((theme) => ({
       width: 150,
     },
   },
-  placeHolder: {
-    fontSize: 25,
-    fontStyle: "oblique",
-    fontWeight: "bold",
-    margin: 10,
+  logo: {
+    maxHeight: "45px",
   },
   buttonText: {
     textAlign: "center",
@@ -50,13 +49,7 @@ export default function HeadBar() {
       <Toolbar>
         <Grid container spacing={0}>
           <Grid item xs={7}>
-            <Typography
-              className={classes.placeHolder}
-              variant="h5"
-              color="initial"
-            >
-              Place Holder Logo
-            </Typography>
+            <Logo className={classes.logo} />
           </Grid>
           <Grid item xs={4}>
             <Grid container spacing={0}>

@@ -1,14 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
+import Switch from "@material-ui/core/Switch";
+import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import DevicesTable from "./DevicesTable";
-import { withStyles } from "@material-ui/core/styles";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import CapacityBar from "./CapacityBar";
-import ImplementQueingPolicy from "./ImplementQueueingPolicy"
-import LinearProgress from "@material-ui/core/LinearProgress";
-import HeadBar from "./HeadBar"
+import Checkbox from "@material-ui/core/Checkbox";
 
 function Copyright() {
   return (
@@ -18,28 +18,99 @@ function Copyright() {
         IoT-Powered Pandemic Safety Suite
       </Link>{" "}
       {new Date().getFullYear()}
-      {"."}
     </Typography>
   );
 }
 
 export default function App() {
-  return (
-    <Container style={{padding:0}}>
-      <Container maxWidth="sm">
-        <Box my={4}>
-          <Typography variant="h4" component="h1" gutterBottom>
-            IoT-Powered Pandemic Safety Suite
+  const [error, setError] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(true);
+  const [items, setItems] = useState([]);
+  const [enabled, setEnabled] = useState(true);
+
+  const handleEnable = (event) => {
+    setEnabled(event.target.checked);
+  };
+
+  // // Note: the empty deps array [] means
+  // // this useEffect will run once
+  // // similar to componentDidMount()
+  // useEffect(() => {
+  //   fetch("https://pandemicsafetysuitebackend.azurewebsites.net/api/max")
+  //     .then((res) => {
+  //       res.json();
+  //     })
+  //     .then(
+  //       (result) => {
+  //         setIsLoaded(true);
+  //         setItems(result);
+  //       },
+  //       // Note: it's important to handle errors here
+  //       // instead of a catch() block so that we don't swallow
+  //       // exceptions from actual bugs in components.
+  //       (error) => {
+  //         setIsLoaded(true);
+  //         setError(error);
+  //       }
+  //     );
+  // }, []);
+
+  if (error) {
+    return (
+      <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justify="center"
+        style={{ minHeight: "80vh" }}
+      >
+        <Grid item xs={4}>
+          <Typography variant="h4" component="h4" align="center" gutterBottom>
+            Error loading data from server.
           </Typography>
-          <br />
-          <CapacityBar value={10} max={22} /><br/>
-          <ImplementQueingPolicy />
-          <br/>
-          <br/>
-          <DevicesTable />
-          <Copyright />
-        </Box>
+          <Typography variant="body1" align="center" gutterBottom>
+            Please contact the administrator.
+          </Typography>
+        </Grid>
+      </Grid>
+    );
+  } else {
+    return (
+      <Container maxWidth="sm" style={{ padding: 0 }}>
+        {isLoaded ? (
+          <Box my={4}>
+            <Box my={4}>
+              <Typography variant="h4" gutterBottom>
+                IoT-Powered Pandemic Safety Suite
+              </Typography>
+            </Box>
+            <Box my={4} display="flex">
+              <Box flexGrow={1} alignSelf="center">
+                <CapacityBar current={10} max={22} />
+              </Box>
+              <Box alignSelf="center">
+                <Checkbox checked={enabled} onChange={handleEnable} />
+              </Box>
+            </Box>
+            <DevicesTable />
+            <Copyright />
+          </Box>
+        ) : (
+          <Grid
+            container
+            spacing={0}
+            direction="column"
+            alignItems="center"
+            justify="center"
+            style={{ minHeight: "60vh" }}
+          >
+            <Grid item xs={3}>
+              <CircularProgress style={{ margin: 0 }} />
+            </Grid>
+          </Grid>
+        )}
       </Container>
-    </Container> 
-  );
+    );
+  }
 }
