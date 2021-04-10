@@ -9,6 +9,7 @@ import DevicesTable from "./DevicesTable";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import CapacityBar from "./CapacityBar";
 import Checkbox from "@material-ui/core/Checkbox";
+import axios from "axios";
 
 function Copyright() {
   return (
@@ -24,36 +25,26 @@ function Copyright() {
 
 export default function App() {
   const [error, setError] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(true);
-  const [items, setItems] = useState([]);
+  const [loaded, setLoaded] = useState(false);
+  const [data, setData] = useState([]);
   const [enabled, setEnabled] = useState(true);
 
   const handleEnable = (event) => {
     setEnabled(event.target.checked);
   };
 
-  // // Note: the empty deps array [] means
-  // // this useEffect will run once
-  // // similar to componentDidMount()
-  // useEffect(() => {
-  //   fetch("https://pandemicsafetysuitebackend.azurewebsites.net/api/max")
-  //     .then((res) => {
-  //       res.json();
-  //     })
-  //     .then(
-  //       (result) => {
-  //         setIsLoaded(true);
-  //         setItems(result);
-  //       },
-  //       // Note: it's important to handle errors here
-  //       // instead of a catch() block so that we don't swallow
-  //       // exceptions from actual bugs in components.
-  //       (error) => {
-  //         setIsLoaded(true);
-  //         setError(error);
-  //       }
-  //     );
-  // }, []);
+  // https://pandemicsafetysuitebackend.azurewebsites.net/api/stats
+  // this useEffect will run once
+  // similar to componentDidMount()
+  useEffect(async () => {
+    const result = await axios(
+      "https://pandemicsafetysuitebackend.azurewebsites.net/api/current"
+    );
+
+    setData(result.data);
+    console.log(result.data);
+    setLoaded(true);
+  });
 
   if (error) {
     return (
@@ -78,7 +69,7 @@ export default function App() {
   } else {
     return (
       <Container maxWidth="sm" style={{ padding: 0 }}>
-        {isLoaded ? (
+        {loaded ? (
           <Box my={4}>
             <Box my={4}>
               <Typography variant="h4" gutterBottom>
