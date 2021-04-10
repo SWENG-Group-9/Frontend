@@ -36,23 +36,25 @@ export default function App() {
     setEnabled(event.target.checked);
   };
 
-  // https://pandemicsafetysuitebackend.azurewebsites.net/api/stats
   // this useEffect will run once
   // similar to componentDidMount()
   useEffect(async () => {
-    const current = await axios(
-      "https://pandemicsafetysuitebackend.azurewebsites.net/api/current"
-    );
+    try {
+      const current = await axios.get(
+        "https://pandemicsafetysuitebackend.azurewebsites.net/api/current"
+      );
 
-    const max = await axios(
-      "https://pandemicsafetysuitebackend.azurewebsites.net/api/max"
-    );
+      const max = await axios.get(
+        "https://pandemicsafetysuitebackend.azurewebsites.net/api/max"
+      );
 
-    setData({
-      current: current.data,
-      max: max.data,
-    });
-
+      setData({
+        current: current.data,
+        max: max.data,
+      });
+    } catch (error) {
+      setError(true);
+    }
     setLoaded(true);
   });
 
