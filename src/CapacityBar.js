@@ -43,13 +43,11 @@ function CapacityBar(props) {
   const handleMaxOpenSubmit = () => {
     setMax(maxTemp);
     setMaxTemp(max);
-
     setMaxOpen(false);
   };
 
   const handleMaxOpenCancel = () => {
     setMaxTemp(max);
-
     setMaxOpen(false);
   };
 
@@ -85,7 +83,7 @@ function CapacityBar(props) {
       >
         <Typography
           variant="subtitle1"
-          component="subtitle1"
+          component="h6"
           style={{ padding: "10px" }}
           onClick={handleClickMaxOpen}
         >

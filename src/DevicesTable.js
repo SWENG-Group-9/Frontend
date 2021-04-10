@@ -131,7 +131,7 @@ export default function DevicesTable() {
       <Box flexGrow={1}>
         <List className={classes.root}>
           {tempDevices.map((device, index) => (
-            <ListItem>
+            <ListItem key={index}>
               <ListItemText
                 disableTypography
                 id="switch-list-label-entrance"
@@ -158,8 +158,8 @@ export default function DevicesTable() {
                     <LockOpenOutlinedIcon />
                   )}
                 </IconButton>
-                <IconButton>
-                  <DeleteOutlineIcon onclick={handleLock(index)} />
+                <IconButton onClick={handleLock(index)}>
+                  <DeleteOutlineIcon />
                 </IconButton>
               </ListItemSecondaryAction>
             </ListItem>
