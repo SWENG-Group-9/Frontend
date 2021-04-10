@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
+import Switch from "@material-ui/core/Switch";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import DevicesTable from "./DevicesTable";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import CapacityBar from "./CapacityBar";
-import ImplementQueingPolicy from "./ImplementQueueingPolicy";
+import Checkbox from "@material-ui/core/Checkbox";
 
 function Copyright() {
   return (
@@ -25,6 +26,11 @@ export default function App() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(true);
   const [items, setItems] = useState([]);
+  const [enabled, setEnabled] = useState(true);
+
+  const handleEnable = (event) => {
+    setEnabled(event.target.checked);
+  };
 
   // // Note: the empty deps array [] means
   // // this useEffect will run once
@@ -79,13 +85,14 @@ export default function App() {
                 IoT-Powered Pandemic Safety Suite
               </Typography>
             </Box>
-            <Box my={4}>
-              <CapacityBar value={10} max={22} />
+            <Box my={4} display="flex">
+              <Box flexGrow={1} alignSelf="center">
+                <CapacityBar current={10} max={22} />
+              </Box>
+              <Box alignSelf="center">
+                <Checkbox checked={enabled} onChange={handleEnable} />
+              </Box>
             </Box>
-            <ImplementQueingPolicy />
-            <br />
-
-            <br />
             <DevicesTable />
             <Copyright />
           </Box>
