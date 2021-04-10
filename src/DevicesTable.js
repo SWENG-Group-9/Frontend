@@ -167,7 +167,7 @@ export default function DevicesTable() {
 
       <Box flexGrow={1}>
         <List className={classes.root}>
-          {tempDevices.map((device) => (
+          {tempDevices.map((device, index) => (
             <ListItem>
               <ListItemText
                 disableTypography
@@ -187,9 +187,9 @@ export default function DevicesTable() {
                 <IconButton
                   edge="end"
                   aria-label="LockIcon"
-                  onClick={handleLock("1")}
+                  onClick={handleLock(index)}
                 >
-                  {locked.indexOf("1") !== -1 ? (
+                  {locked.indexOf(index) !== -1 ? (
                     <LockOutlinedIcon />
                   ) : (
                     <LockOpenOutlinedIcon />
