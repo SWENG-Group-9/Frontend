@@ -26,7 +26,10 @@ function Copyright() {
 export default function App() {
   const [error, setError] = useState(null);
   const [loaded, setLoaded] = useState(false);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({
+    current: 0,
+    max: 0,
+  });
   const [enabled, setEnabled] = useState(true);
 
   const handleEnable = (event) => {
@@ -37,12 +40,19 @@ export default function App() {
   // this useEffect will run once
   // similar to componentDidMount()
   useEffect(async () => {
-    const result = await axios(
+    const current = await axios(
       "https://pandemicsafetysuitebackend.azurewebsites.net/api/current"
     );
 
-    setData(result.data);
-    console.log(result.data);
+    const max = await axios(
+      "https://pandemicsafetysuitebackend.azurewebsites.net/api/max"
+    );
+
+    setData({
+      current: current.data,
+      max: max.data,
+    });
+
     setLoaded(true);
   });
 
@@ -78,7 +88,7 @@ export default function App() {
             </Box>
             <Box my={4} display="flex">
               <Box flexGrow={1} alignSelf="center">
-                <CapacityBar current={10} max={22} />
+                <CapacityBar current={data.current} max={data.max} />
               </Box>
               <Box alignSelf="center">
                 <Checkbox checked={enabled} onChange={handleEnable} />
