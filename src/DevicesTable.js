@@ -158,7 +158,7 @@ export default function DevicesTable() {
                     <LockOpenOutlinedIcon />
                   )}
                 </IconButton>
-                <IconButton onClick={handleLock(index)}>
+                <IconButton onClick={handleDelete(index)}>
                   <DeleteOutlineIcon />
                 </IconButton>
               </ListItemSecondaryAction>
