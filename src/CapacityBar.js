@@ -1,4 +1,6 @@
 import React from "react";
+import { useTheme } from "@material-ui/core/styles";
+
 import { withStyles } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
@@ -13,25 +15,17 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 
 const normalise = (value, max) => (value * 100) / max;
 
-const NormalLinearProgress = withStyles((theme) => ({
+const StatusLinearProgress = withStyles((theme) => ({
   root: {
     height: 35,
   },
+  bar: {
+    backgroundColor: (props) => props.status,
+  },
 }))(LinearProgress);
 
-const WarningLinearProgres = withStyles((theme) => ({
-  bar: {
-    backgroundColor: theme.palette.warning.main,
-  },
-}))(NormalLinearProgress);
-
-const ErrorLinearProgres = withStyles((theme) => ({
-  bar: {
-    backgroundColor: theme.palette.error.main,
-  },
-}))(NormalLinearProgress);
-
 function CapacityBar(props) {
+  const theme = useTheme();
   const [maxOpen, setMaxOpen] = React.useState(false);
   const [maxTemp, setMaxTemp] = React.useState(props.max);
   const [current, setCurrent] = React.useState(props.current);
@@ -59,29 +53,26 @@ function CapacityBar(props) {
     setMaxOpen(false);
   };
 
-  let normValue = normalise(props.current, props.max);
+  let normValue = normalise(current, max);
   if (normValue > 100) {
     normValue = 100;
   }
 
-  let status = "normal";
+  let status = theme.palette.primary.main;
   if (normValue >= 75 && normValue < 90) {
-    status = "warning";
+    status = theme.palette.warning.main;
   } else if (normValue >= 90) {
-    status = "error";
+    status = theme.palette.error.main;
   }
 
   return (
     <Box position="relative">
-      {status === "normal" && (
-        <NormalLinearProgress variant="determinate" value={normValue} />
-      )}
-      {status === "warning" && (
-        <WarningLinearProgres variant="determinate" value={normValue} />
-      )}
-      {status === "error" && (
-        <ErrorLinearProgres variant="determinate" value={normValue} />
-      )}
+      <StatusLinearProgress
+        variant="determinate"
+        value={normValue}
+        status={status}
+      />
+
       <Box
         top={0}
         left={0}
