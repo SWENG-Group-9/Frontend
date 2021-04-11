@@ -9,8 +9,9 @@ import {
 import SvgIcon from "@material-ui/core/SvgIcon";
 import { ReactComponent as Logo } from "./logo.svg";
 import { makeStyles } from "@material-ui/styles";
-import { AccountCircle, Widgets } from "@material-ui/icons/";
+import { AccountCircle } from "@material-ui/icons/";
 import { Link as RouterLink } from "react-router-dom";
+import Box from "@material-ui/core/Box";
 
 const useStyles = makeStyles((theme) => ({
   appBarStyle: {
@@ -35,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
   logo: {
     maxHeight: "45px",
+    maxWidth: "45px",
   },
   buttonText: {
     textAlign: "center",
@@ -47,51 +49,48 @@ export default function HeadBar() {
   return (
     <AppBar position="static" className={classes.appBarStyle}>
       <Toolbar>
-        <Grid container spacing={0}>
-          <Grid item xs={7}>
+        <Box display="flex" flexGrow={1} alignItems="center">
+          <Box flexGrow={1}>
             <Logo className={classes.logo} />
-          </Grid>
-          <Grid item xs={4}>
-            <Grid container spacing={0}>
-              <Grid item xs>
-                <Button
-                  component={RouterLink}
-                  to="/"
-                  color="secondary"
-                  variant="contained"
-                  className={classes.buttonStyle}
-                >
-                  <Typography className={classes.buttonText}>
-                    Manage Devices
-                  </Typography>
-                </Button>
-              </Grid>
-              <Grid item xs>
-                <Button
-                  component={RouterLink}
-                  to="/statistics"
-                  color="secondary"
-                  variant="contained"
-                  className={classes.buttonStyle}
-                >
-                  <Typography className={classes.buttonText}>
-                    View Data
-                  </Typography>
-                </Button>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs={1}>
-            <IconButton
-              aria-label="account-tab"
-              className={classes.iconButton}
-              component={RouterLink}
-              to="/login"
-            >
-              <AccountCircle />
-            </IconButton>
-          </Grid>
-        </Grid>
+          </Box>
+          <Button
+            component={RouterLink}
+            to="/public"
+            color="secondary"
+            variant="contained"
+            className={classes.buttonStyle}
+          >
+            <Typography className={classes.buttonText}>Public View</Typography>
+          </Button>
+          <Button
+            component={RouterLink}
+            to="/"
+            color="secondary"
+            variant="contained"
+            className={classes.buttonStyle}
+          >
+            <Typography className={classes.buttonText}>
+              Manage Devices
+            </Typography>
+          </Button>
+          <Button
+            component={RouterLink}
+            to="/statistics"
+            color="secondary"
+            variant="contained"
+            className={classes.buttonStyle}
+          >
+            <Typography className={classes.buttonText}>View Data</Typography>
+          </Button>
+          <IconButton
+            aria-label="account-tab"
+            className={classes.iconButton}
+            component={RouterLink}
+            to="/login"
+          >
+            <AccountCircle />
+          </IconButton>
+        </Box>
       </Toolbar>
     </AppBar>
   );

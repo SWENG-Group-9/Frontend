@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import Switch from "@material-ui/core/Switch";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import DevicesTable from "./DevicesTable";
@@ -26,23 +25,35 @@ function Copyright() {
 export default function App() {
   const [error, setError] = useState(null);
   const [loaded, setLoaded] = useState(false);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({
+    current: 0,
+    max: 0,
+  });
   const [enabled, setEnabled] = useState(true);
 
   const handleEnable = (event) => {
     setEnabled(event.target.checked);
   };
 
-  // https://pandemicsafetysuitebackend.azurewebsites.net/api/stats
   // this useEffect will run once
   // similar to componentDidMount()
   useEffect(async () => {
-    const result = await axios(
-      "https://pandemicsafetysuitebackend.azurewebsites.net/api/current"
-    );
+    try {
+      const current = await axios.get(
+        "https://pandemicsafetysuitebackend.azurewebsites.net/api/current"
+      );
 
-    setData(result.data);
-    console.log(result.data);
+      const max = await axios.get(
+        "https://pandemicsafetysuitebackend.azurewebsites.net/api/max"
+      );
+
+      setData({
+        current: current.data,
+        max: max.data,
+      });
+    } catch (error) {
+      setError(true);
+    }
     setLoaded(true);
   });
 
@@ -78,7 +89,7 @@ export default function App() {
             </Box>
             <Box my={4} display="flex">
               <Box flexGrow={1} alignSelf="center">
-                <CapacityBar current={10} max={22} />
+                <CapacityBar current={data.current} max={data.max} />
               </Box>
               <Box alignSelf="center">
                 <Checkbox checked={enabled} onChange={handleEnable} />

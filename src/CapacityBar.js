@@ -1,6 +1,6 @@
 import React from "react";
 import { useTheme } from "@material-ui/core/styles";
-
+import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
@@ -33,23 +33,31 @@ function CapacityBar(props) {
 
   const updateMax = (event) => {
     setMaxTemp(event.target.value);
-    console.log(event.target.value);
   };
 
   const handleClickMaxOpen = () => {
     setMaxOpen(true);
   };
 
-  const handleMaxOpenSubmit = () => {
-    setMax(maxTemp);
-    setMaxTemp(max);
-
-    setMaxOpen(false);
+  const handleMaxOpenSubmit = async () => {
+    let error = false;
+    try {
+      const setMax = await axios.put(
+        "https://pandemicsafetysuitebackend.azurewebsites.net/api/max/" +
+          maxTemp
+      );
+    } catch (error) {
+      error = true;
+    }
+    if (!error) {
+      setMax(maxTemp);
+      setMaxTemp(max);
+      setMaxOpen(false);
+    }
   };
 
   const handleMaxOpenCancel = () => {
     setMaxTemp(max);
-
     setMaxOpen(false);
   };
 
@@ -85,7 +93,7 @@ function CapacityBar(props) {
       >
         <Typography
           variant="subtitle1"
-          component="subtitle1"
+          component="h6"
           style={{ padding: "10px" }}
           onClick={handleClickMaxOpen}
         >
