@@ -115,7 +115,7 @@ function CapacityBar(props) {
               label="Number"
               type="number"
               fullWidth
-              onInput={updateMax}
+              onChange={updateMax}
             />
           </DialogContent>
           <DialogActions>
