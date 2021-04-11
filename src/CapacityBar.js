@@ -32,13 +32,23 @@ function CapacityBar(props) {
   const [max, setMax] = React.useState(props.max);
 
   useEffect(() => {
-    const interval = setInterval(updateData, 1000);
+    const interval = setInterval(getData, 1000);
     return () => clearInterval(interval);
   }, []);
 
-  const updateData = () => {
-    setMax(props.max);
-    setCurrent(props.current);
+  const getData = async () => {
+    try {
+      const current = await axios.get(
+        process.env.REACT_APP_BACKEND_ENDPOINT + "/api/current"
+      );
+
+      const max = await axios.get(
+        process.env.REACT_APP_BACKEND_ENDPOINT + "/api/max"
+      );
+
+      setMax(max.data);
+      setCurrent(current.data);
+    } catch (error) {}
   };
 
   const updateMax = (event) => {
@@ -50,7 +60,6 @@ function CapacityBar(props) {
   };
 
   const handleMaxOpenSubmit = async () => {
-    let error = false;
     try {
       const setMax = await axios.put(
         process.env.REACT_APP_BACKEND_ENDPOINT + "/api/max/" + maxTemp
@@ -58,9 +67,7 @@ function CapacityBar(props) {
       setMax(maxTemp);
       setMaxTemp(max);
       setMaxOpen(false);
-    } catch (error) {
-      error = true;
-    }
+    } catch (error) {}
   };
 
   const handleMaxOpenCancel = () => {

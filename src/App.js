@@ -54,11 +54,10 @@ export default function App() {
         current: current.data,
         max: max.data,
       });
+      setLoaded(true);
     } catch (error) {
       setError(true);
-      console.log(error);
     }
-    setLoaded(true);
   };
   if (error) {
     return (
