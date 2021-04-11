@@ -32,7 +32,7 @@ function CapacityBar(props) {
   const [max, setMax] = React.useState(props.max);
 
   useEffect(() => {
-    const interval = setInterval(getData, 1000);
+    const interval = setInterval(updateData, 1000);
     return () => clearInterval(interval);
   }, []);
 
