@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import Switch from "@material-ui/core/Switch";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import DevicesTable from "./DevicesTable";
