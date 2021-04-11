@@ -35,9 +35,12 @@ export default function App() {
     setEnabled(event.target.checked);
   };
 
-  // this useEffect will run once
-  // similar to componentDidMount()
-  useEffect(async () => {
+  useEffect(() => {
+    const interval = setInterval(getData, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const getData = async () => {
     try {
       const current = await axios.get(
         process.env.REACT_APP_BACKEND_ENDPOINT + "/api/current"
@@ -56,8 +59,7 @@ export default function App() {
       console.log(error);
     }
     setLoaded(true);
-  });
-
+  };
   if (error) {
     return (
       <Grid

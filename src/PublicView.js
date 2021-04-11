@@ -38,33 +38,34 @@ export default function PublicView() {
     max: 0,
   });
 
-  useEffect(async () => {
-    getData();
-  });
+  useEffect(() => {
+    const interval = setInterval(getData, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const getData = async () => {
     try {
-      const current = await axios.get(
+      const currentGet = await axios.get(
         process.env.REACT_APP_BACKEND_ENDPOINT + "/api/current"
       );
 
-      const max = await axios.get(
+      const maxGet = await axios.get(
         process.env.REACT_APP_BACKEND_ENDPOINT + "/api/max"
       );
 
       setData({
-        current: current.data,
-        max: max.data,
+        current: currentGet.data,
+        max: maxGet.data,
       });
+      setLoaded(true);
+
+      if (currentGet.data < maxGet.data) {
+        setOpen(true);
+      } else {
+        setOpen(false);
+      }
     } catch (error) {
       setError(true);
-    }
-    setLoaded(true);
-
-    if (data.current <= data.max) {
-      setOpen(true);
-    } else {
-      setOpen(false);
     }
   };
 
