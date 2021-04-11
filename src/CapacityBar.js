@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useTheme } from "@material-ui/core/styles";
 import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
@@ -31,6 +31,16 @@ function CapacityBar(props) {
   const [current, setCurrent] = React.useState(props.current);
   const [max, setMax] = React.useState(props.max);
 
+  useEffect(() => {
+    const interval = setInterval(updateData, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const updateData = () => {
+    setMax(props.max);
+    setCurrent(props.current);
+  };
+
   const updateMax = (event) => {
     setMaxTemp(event.target.value);
   };
@@ -43,16 +53,13 @@ function CapacityBar(props) {
     let error = false;
     try {
       const setMax = await axios.put(
-        "https://pandemicsafetysuitebackend.azurewebsites.net/api/max/" +
-          maxTemp
+        process.env.REACT_APP_BACKEND_ENDPOINT + "/api/max/" + maxTemp
       );
-    } catch (error) {
-      error = true;
-    }
-    if (!error) {
       setMax(maxTemp);
       setMaxTemp(max);
       setMaxOpen(false);
+    } catch (error) {
+      error = true;
     }
   };
 
@@ -116,7 +123,7 @@ function CapacityBar(props) {
               label="Number"
               type="number"
               fullWidth
-              onInput={updateMax}
+              onChange={updateMax}
             />
           </DialogContent>
           <DialogActions>

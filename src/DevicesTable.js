@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -43,7 +44,14 @@ export default function DevicesTable() {
   const classes = useStyles();
   const [locked, setLocked] = React.useState(["locked"]);
   const [addOpen, setAddOpen] = React.useState(false);
+  const [deviceCodeOpen, setDeviceCodeOpen] = React.useState(false);
   const [type, setType] = React.useState("");
+  const [name, setName] = React.useState("");
+  const [deviceCode, setDeviceCode] = React.useState("");
+
+  const handleNameChange = (event) => {
+    setName(event.target.value);
+  };
 
   const hadleTypeChange = (event) => {
     setType(event.target.value);
@@ -55,6 +63,23 @@ export default function DevicesTable() {
 
   const handleAddClose = () => {
     setAddOpen(false);
+  };
+
+  const handleAdd = async () => {
+    setAddOpen(false);
+    try {
+      const addDevice = await axios.get(
+        process.env.REACT_APP_BACKEND_ENDPOINT + "/api/devices/" + name
+      );
+      console.log(addDevice.data);
+      setDeviceCodeOpen(true);
+      setDeviceCode(addDevice.data);
+      setName("");
+    } catch (error) {}
+  };
+
+  const handleDeviceCodeClose = () => {
+    setDeviceCodeOpen(false);
   };
 
   const handleLock = (value) => () => {
@@ -103,6 +128,7 @@ export default function DevicesTable() {
             id="deviceName"
             label="Device Name"
             type="text"
+            onChange={handleNameChange}
             fullWidth
           />
           <TextField
@@ -122,8 +148,29 @@ export default function DevicesTable() {
           <Button onClick={handleAddClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleAddClose} color="primary">
+          <Button onClick={handleAdd} color="primary">
             Add
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={deviceCodeOpen}
+        onClose={handleDeviceCodeClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Add Device Code</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Please use the following code to add your device to the system.
+          </DialogContentText>
+          <DialogContentText id="alert-dialog-description">
+            {deviceCode}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeviceCodeClose} color="primary" autoFocus>
+            Close
           </Button>
         </DialogActions>
       </Dialog>

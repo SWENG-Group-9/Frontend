@@ -35,16 +35,19 @@ export default function App() {
     setEnabled(event.target.checked);
   };
 
-  // this useEffect will run once
-  // similar to componentDidMount()
-  useEffect(async () => {
+  useEffect(() => {
+    const interval = setInterval(getData, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const getData = async () => {
     try {
       const current = await axios.get(
-        "https://pandemicsafetysuitebackend.azurewebsites.net/api/current"
+        process.env.REACT_APP_BACKEND_ENDPOINT + "/api/current"
       );
 
       const max = await axios.get(
-        "https://pandemicsafetysuitebackend.azurewebsites.net/api/max"
+        process.env.REACT_APP_BACKEND_ENDPOINT + "/api/max"
       );
 
       setData({
@@ -53,10 +56,10 @@ export default function App() {
       });
     } catch (error) {
       setError(true);
+      console.log(error);
     }
     setLoaded(true);
-  });
-
+  };
   if (error) {
     return (
       <Grid
