@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   enter: {
@@ -27,9 +29,41 @@ const PrimaryTypography = withStyles((theme) => ({
 }))(WhiteTypography);
 
 export default function PublicView() {
-  let open = true;
-
   const classes = useStyles();
+  const [error, setError] = useState(null);
+  const [loaded, setLoaded] = useState(false);
+  const [open, setOpen] = useState(true);
+  const [data, setData] = useState({
+    current: 0,
+    max: 0,
+  });
+
+  useEffect(async () => {
+    try {
+      const current = await axios.get(
+        "https://pandemicsafetysuitebackend.azurewebsites.net/api/current"
+      );
+
+      const max = await axios.get(
+        "https://pandemicsafetysuitebackend.azurewebsites.net/api/max"
+      );
+
+      setData({
+        current: current.data,
+        max: max.data,
+      });
+    } catch (error) {
+      setError(true);
+    }
+    setLoaded(true);
+
+    if (data.current <= data.max) {
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
+  });
+
   return (
     <Box className={open ? classes.enter : classes.exit}>
       <Grid
@@ -41,23 +75,32 @@ export default function PublicView() {
         style={{ minHeight: "100vh" }}
       >
         <Grid item xs={3}>
-          <PrimaryTypography
-            variant="h1"
-            component="h1"
-            align="center"
-            fontWeight="fontWeightBold"
-          >
-            11
-          </PrimaryTypography>
-          <WhiteTypography
-            variant="h2"
-            component="h2"
-            align="center"
-            style={{}}
-            fontStyle="italic"
-          >
-            {open ? "Come on in!" : "STOP"}
-          </WhiteTypography>
+          {loaded ? (
+            <>
+              <PrimaryTypography
+                variant="h1"
+                component="h1"
+                align="center"
+                fontWeight="fontWeightBold"
+              >
+                {error ? "Error" : data.current}
+              </PrimaryTypography>
+              <WhiteTypography
+                variant="h2"
+                component="h2"
+                align="center"
+                fontStyle="italic"
+              >
+                {error
+                  ? "Contact Administrator"
+                  : open
+                  ? "Come on in!"
+                  : "STOP"}
+              </WhiteTypography>
+            </>
+          ) : (
+            <CircularProgress style={{ margin: 0 }} />
+          )}
         </Grid>
       </Grid>
     </Box>
