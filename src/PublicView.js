@@ -41,11 +41,11 @@ export default function PublicView() {
   useEffect(async () => {
     try {
       const current = await axios.get(
-        "https://pandemicsafetysuitebackend.azurewebsites.net/api/current"
+        process.env.REACT_APP_BACKEND_ENDPOINT + "/api/current"
       );
 
       const max = await axios.get(
-        "https://pandemicsafetysuitebackend.azurewebsites.net/api/max"
+        process.env.REACT_APP_BACKEND_ENDPOINT + "/api/max"
       );
 
       setData({

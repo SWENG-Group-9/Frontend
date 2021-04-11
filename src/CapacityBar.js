@@ -43,8 +43,7 @@ function CapacityBar(props) {
     let error = false;
     try {
       const setMax = await axios.put(
-        "https://pandemicsafetysuitebackend.azurewebsites.net/api/max/" +
-          maxTemp
+        process.env.REACT_APP_BACKEND_ENDPOINT + "/api/max/" + maxTemp
       );
     } catch (error) {
       error = true;
