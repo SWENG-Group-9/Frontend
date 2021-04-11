@@ -104,7 +104,7 @@ export default function PublicView() {
               </WhiteTypography>
             </>
           ) : (
-            <CircularProgress style={{ margin: 0 }} />
+            <CircularProgress style={{ margin: 0 }} color="secondary" />
           )}
         </Grid>
       </Grid>
