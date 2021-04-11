@@ -39,6 +39,10 @@ export default function PublicView() {
   });
 
   useEffect(async () => {
+    getData();
+  });
+
+  const getData = async () => {
     try {
       const current = await axios.get(
         process.env.REACT_APP_BACKEND_ENDPOINT + "/api/current"
@@ -62,7 +66,7 @@ export default function PublicView() {
     } else {
       setOpen(false);
     }
-  });
+  };
 
   return (
     <Box className={open ? classes.enter : classes.exit}>
