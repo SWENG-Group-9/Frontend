@@ -1,120 +1,75 @@
-import React, { useState, useEffect } from "react";
-import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
-import DevicesTable from "./components/DevicesTable";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import CapacityBar from "./components/CapacityBar";
-import Checkbox from "@material-ui/core/Checkbox";
-import axios from "axios";
+import React from "react";
+import { Route, Switch, useHistory } from "react-router-dom";
 
-function Copyright() {
+// MSAL imports
+import { MsalProvider } from "@azure/msal-react";
+import { CustomNavigationClient } from "./utils/NavigationClient";
+import {
+  AuthenticatedTemplate,
+  UnauthenticatedTemplate,
+} from "@azure/msal-react";
+
+// SEO
+import { Helmet } from "react-helmet";
+import NavBar from "./components/NavBar";
+
+// Pages
+import PublicView from "./pages/PublicView";
+import AppStatistics from "./pages/AppStatistics";
+import ManageDevices from "./pages/ManageDevices";
+import Unauthenticated from "./pages/Unauthenticated";
+
+function App({ pca }) {
+  // The next 3 lines are optional. This is how you configure MSAL to take advantage of the router's navigate functions when MSAL redirects between pages in your app
+  const history = useHistory();
+  const navigationClient = new CustomNavigationClient(history);
+  pca.setNavigationClient(navigationClient);
+
   return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="http://localhost:3000/">
-        IoT-Powered Pandemic Safety Suite
-      </Link>{" "}
-      {new Date().getFullYear()}
-    </Typography>
+    <MsalProvider instance={pca}>
+      <Pages />
+    </MsalProvider>
   );
 }
 
-export default function App() {
-  const [error, setError] = useState(null);
-  const [loaded, setLoaded] = useState(false);
-  const [data, setData] = useState({
-    current: 0,
-    max: 0,
-  });
-  const [enabled, setEnabled] = useState(true);
-
-  const handleEnable = (event) => {
-    setEnabled(event.target.checked);
-  };
-
-  useEffect(() => {
-    const interval = setInterval(getData, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const getData = async () => {
-    try {
-      const current = await axios.get(
-        process.env.REACT_APP_BACKEND_ENDPOINT + "/api/current"
-      );
-
-      const max = await axios.get(
-        process.env.REACT_APP_BACKEND_ENDPOINT + "/api/max"
-      );
-
-      setData({
-        current: current.data,
-        max: max.data,
-      });
-      setLoaded(true);
-    } catch (error) {
-      setError(true);
-    }
-  };
-  if (error) {
-    return (
-      <Grid
-        container
-        spacing={0}
-        direction="column"
-        alignItems="center"
-        justify="center"
-        style={{ minHeight: "80vh" }}
-      >
-        <Grid item xs={4}>
-          <Typography variant="h4" component="h4" align="center" gutterBottom>
-            Error loading data from server.
-          </Typography>
-          <Typography variant="body1" align="center" gutterBottom>
-            Please contact the administrator.
-          </Typography>
-        </Grid>
-      </Grid>
-    );
-  } else {
-    return (
-      <Container maxWidth="sm" style={{ padding: 0 }}>
-        {loaded ? (
-          <Box my={4}>
-            <Box my={4}>
-              <Typography variant="h4" gutterBottom>
-                IoT-Powered Pandemic Safety Suite
-              </Typography>
-            </Box>
-            <Box my={4} display="flex">
-              <Box flexGrow={1} alignSelf="center">
-                <CapacityBar current={data.current} max={data.max} />
-              </Box>
-              <Box alignSelf="center">
-                <Checkbox checked={enabled} onChange={handleEnable} />
-              </Box>
-            </Box>
-            <DevicesTable />
-            <Copyright />
-          </Box>
-        ) : (
-          <Grid
-            container
-            spacing={0}
-            direction="column"
-            alignItems="center"
-            justify="center"
-            style={{ minHeight: "60vh" }}
-          >
-            <Grid item xs={3}>
-              <CircularProgress style={{ margin: 0 }} />
-            </Grid>
-          </Grid>
-        )}
-      </Container>
-    );
-  }
+function Pages() {
+  return (
+    <Switch>
+      <Route exact path="/">
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>IoT Pandemic Safety Suite</title>
+        </Helmet>
+        <NavBar />
+        <AuthenticatedTemplate>
+          <ManageDevices />
+        </AuthenticatedTemplate>
+        <UnauthenticatedTemplate>
+          <Unauthenticated />
+        </UnauthenticatedTemplate>
+      </Route>
+      <Route exact path="/statistics">
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>Statistics</title>
+        </Helmet>
+        <NavBar />
+        <AuthenticatedTemplate>
+          <AppStatistics />
+        </AuthenticatedTemplate>
+        <UnauthenticatedTemplate>
+          <Unauthenticated />
+        </UnauthenticatedTemplate>
+      </Route>
+      <Route exact path="/public">
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>IoT Pandemic Safety Suite</title>
+        </Helmet>
+        <PublicView />
+      </Route>
+    </Switch>
+  );
 }
+
+export default App;

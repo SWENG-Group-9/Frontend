@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { useTheme } from "@material-ui/core/styles";
 import axios from "axios";
-import { withStyles } from "@material-ui/core/styles";
+
+import { withStyles, useTheme } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";

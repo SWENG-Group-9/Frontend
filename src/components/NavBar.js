@@ -1,16 +1,21 @@
+import React from "react";
+import { Link as RouterLink } from "react-router-dom";
+import { useMsal, useIsAuthenticated } from "@azure/msal-react";
+
+import { makeStyles } from "@material-ui/styles";
 import {
   AppBar,
   Toolbar,
   Typography,
   Button,
   IconButton,
+  Box,
 } from "@material-ui/core";
-import SvgIcon from "@material-ui/core/SvgIcon";
-import { ReactComponent as Logo } from "../assets/logo.svg";
-import { makeStyles } from "@material-ui/styles";
 import { AccountCircle } from "@material-ui/icons/";
-import { Link as RouterLink } from "react-router-dom";
-import Box from "@material-ui/core/Box";
+
+import WelcomeName from "../components/WelcomeName";
+
+import { ReactComponent as Logo } from "../assets/logo.svg";
 
 const useStyles = makeStyles((theme) => ({
   appBarStyle: {
@@ -42,6 +47,29 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 12,
   },
 }));
+
+const SignInSignOut = () => {
+  const classes = useStyles();
+  const { instance } = useMsal();
+  const isAuthenticated = useIsAuthenticated();
+
+  const handleLogin = () => {
+    instance.loginPopup();
+  };
+
+  const handleLogout = (logoutType) => {
+    instance.logoutPopup();
+  };
+  return (
+    <IconButton
+      aria-label="account-tab"
+      className={classes.iconButton}
+      onClick={isAuthenticated ? handleLogout : handleLogin}
+    >
+      <AccountCircle />
+    </IconButton>
+  );
+};
 
 export default function HeadBar() {
   const classes = useStyles();
@@ -81,14 +109,8 @@ export default function HeadBar() {
           >
             <Typography className={classes.buttonText}>View Data</Typography>
           </Button>
-          <IconButton
-            aria-label="account-tab"
-            className={classes.iconButton}
-            component={RouterLink}
-            to="/login"
-          >
-            <AccountCircle />
-          </IconButton>
+          <WelcomeName />
+          <SignInSignOut />
         </Box>
       </Toolbar>
     </AppBar>

@@ -1,64 +1,40 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter as Router } from "react-router-dom";
+
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/core/styles";
-import { Helmet } from "react-helmet";
+import theme from "./styles/theme";
 import App from "./App";
-import AppStatistics from "./pages/AppStatistics";
-import theme from "./theme";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import HeadBar from "./components/HeadBar";
-import PublicView from "./pages/PublicView";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+
+// MSAL imports
+import { PublicClientApplication, EventType } from "@azure/msal-browser";
+import { msalConfig } from "./authConfig";
+
+export const msalInstance = new PublicClientApplication(msalConfig);
+
+// Account selection logic is app dependent. Adjust as needed for different use cases.
+const accounts = msalInstance.getAllAccounts();
+if (accounts.length > 0) {
+  msalInstance.setActiveAccount(accounts[0]);
+}
+
+msalInstance.addEventCallback((event) => {
+  if (event.eventType === EventType.LOGIN_SUCCESS && event.payload.account) {
+    const account = event.payload.account;
+    msalInstance.setActiveAccount(account);
+  }
+});
 
 ReactDOM.render(
-  <ThemeProvider theme={theme}>
-    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-    <CssBaseline />
-    <BrowserRouter>
-      <Switch>
-        <Route exact path="/">
-          <Helmet>
-            <meta charSet="utf-8" />
-            <title>IoT Pandemic Safety Suite</title>
-          </Helmet>
-          <HeadBar />
-          <App />
-        </Route>
-        <Route exact path="/statistics">
-          <Helmet>
-            <meta charSet="utf-8" />
-            <title>Statistics</title>
-          </Helmet>
-          <HeadBar />
-          <AppStatistics />
-        </Route>
-        <Route exact path="/public">
-          <Helmet>
-            <meta charSet="utf-8" />
-            <title>IoT Pandemic Safety Suite</title>
-          </Helmet>
-          <PublicView />
-        </Route>
-        <Route exact path="/login">
-          <Helmet>
-            <meta charSet="utf-8" />
-            <title>Login</title>
-          </Helmet>
-          <HeadBar />
-          <Login />
-        </Route>
-        <Route exact path="/signup">
-          <Helmet>
-            <meta charSet="utf-8" />
-            <title>Signup</title>
-          </Helmet>
-          <HeadBar />
-          <Signup />
-        </Route>
-      </Switch>
-    </BrowserRouter>
-  </ThemeProvider>,
+  <React.StrictMode>
+    <Router>
+      <ThemeProvider theme={theme}>
+        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+        <CssBaseline />
+        <App pca={msalInstance} />
+      </ThemeProvider>
+    </Router>
+  </React.StrictMode>,
   document.querySelector("#root")
 );
