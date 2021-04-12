@@ -1,12 +1,12 @@
-import React from 'react';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import React from "react";
+
+import { withStyles, makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -19,9 +19,8 @@ const StyledTableCell = withStyles((theme) => ({
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
-      backgroundColor: theme.palette.background1.main,
-    },
-  
+    backgroundColor: theme.palette.background1.main,
+  },
 }))(TableRow);
 
 function createData(name, data) {
@@ -29,29 +28,27 @@ function createData(name, data) {
 }
 
 const rows = [
-  createData('Busiest Day of Week',  "Tuesday"),
-  createData('Most Customers in 1 Day',  247),
-  createData('Busiest Time of Day', "18:00"),
-  createData('Quietest Period of day',"07:00"),
-  createData('Average Number of Customers per Day',178),
+  createData("Doors in use", 2),
+  createData("Locked Doors", 2),
+  createData("Unlocked Doors in use", 2),
+  createData("Automatic Queing System in Use", "Yes"),
 ];
 
 const useStyles = makeStyles({
   table: {
-    minWidth: 300,
+    minWidth: 100,
   },
-  
 });
 
-export default function CustomizedTables() {
+export default function DoorStatisticsTable() {
   const classes = useStyles();
 
   return (
-    <TableContainer >
+    <TableContainer>
       <Table className={classes.table} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Summary Statistics</StyledTableCell>
+            <StyledTableCell>Door Statistics</StyledTableCell>
             <StyledTableCell align="right"></StyledTableCell>
           </TableRow>
         </TableHead>

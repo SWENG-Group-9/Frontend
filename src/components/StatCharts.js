@@ -1,3 +1,5 @@
+import React from "react";
+
 import {
   Container,
   Typography,
@@ -5,8 +7,7 @@ import {
   CircularProgress,
   Grid,
 } from "@material-ui/core";
-import React from "react";
-import { Bar, Line } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 
 export default function StatCharts({ values, times, found, loading, date }) {
   return (

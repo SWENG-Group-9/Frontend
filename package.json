@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
@@ -9,6 +9,8 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "@azure/msal-browser": "^2.13.1",
+    "@azure/msal-react": "^1.0.0-beta.1",
     "@material-ui/core": "latest",
     "@material-ui/icons": "^4.11.2",
     "axios": "^0.21.1",
