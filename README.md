@@ -4,7 +4,7 @@
 
 - [x] Boilerplate Code
 - [x] Build components from Roadmap
-- [ ] Admin Authentication
+- [x] Admin Authentication
 - [ ] Integrate with Device Backend
 - [ ] Write full documentation
 
