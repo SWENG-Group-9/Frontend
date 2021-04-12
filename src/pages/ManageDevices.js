@@ -16,7 +16,7 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="http://localhost:3000/">
+      <Link color="inherit" href="/">
         IoT-Powered Pandemic Safety Suite
       </Link>{" "}
       {new Date().getFullYear()}
