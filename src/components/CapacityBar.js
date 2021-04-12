@@ -66,8 +66,8 @@ function CapacityBar(props) {
       );
       setMax(maxTemp);
       setMaxTemp(max);
-      setMaxOpen(false);
     } catch (error) {}
+    setMaxOpen(false);
   };
 
   const handleMaxOpenCancel = () => {
