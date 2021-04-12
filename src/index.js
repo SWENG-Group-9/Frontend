@@ -4,13 +4,13 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { Helmet } from "react-helmet";
 import App from "./App";
-import AppStatistics from "./AppStatistics";
+import AppStatistics from "./pages/AppStatistics";
 import theme from "./theme";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import HeadBar from "./HeadBar";
-import PublicView from "./PublicView";
-import Login from "./Login";
-import Signup from "./Signup";
+import HeadBar from "./components/HeadBar";
+import PublicView from "./pages/PublicView";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>

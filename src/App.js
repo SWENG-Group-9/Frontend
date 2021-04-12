@@ -4,9 +4,9 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
-import DevicesTable from "./DevicesTable";
+import DevicesTable from "./components/DevicesTable";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import CapacityBar from "./CapacityBar";
+import CapacityBar from "./components/CapacityBar";
 import Checkbox from "@material-ui/core/Checkbox";
 import axios from "axios";
 

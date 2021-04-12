@@ -1,9 +1,9 @@
 import { Container, Grid } from "@material-ui/core";
 import { useState, useEffect } from "react";
-import ChartControl from "./ChartControl";
-import StatCharts from "./StatCharts";
-import SummaryStatsTable from "./SummaryStatsTable";
-import DoorStatisticsTable from "./DoorStatisticsTable";
+import ChartControl from "../components/ChartControl";
+import StatCharts from "../components/StatCharts";
+import SummaryStatsTable from "../components/SummaryStatsTable";
+import DoorStatisticsTable from "../components/DoorStatisticsTable";
 
 export default function AppStatistics() {
   const [times, setTimes] = useState([]);

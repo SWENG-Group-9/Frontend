@@ -4,10 +4,9 @@ import {
   Typography,
   Button,
   IconButton,
-  Grid,
 } from "@material-ui/core";
 import SvgIcon from "@material-ui/core/SvgIcon";
-import { ReactComponent as Logo } from "./logo.svg";
+import { ReactComponent as Logo } from "../assets/logo.svg";
 import { makeStyles } from "@material-ui/styles";
 import { AccountCircle } from "@material-ui/icons/";
 import { Link as RouterLink } from "react-router-dom";
