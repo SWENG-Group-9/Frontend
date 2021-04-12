@@ -14,9 +14,11 @@ const isFirefox = firefox > 0; // Only needed if you need to support the redirec
 // Config object to be passed to Msal on creation
 export const msalConfig = {
   auth: {
-    clientId: "72d30a88-ca2c-4088-ac74-546e5e003fdc",
+    clientId: process.env.REACT_APP_AZURE_AD_APP_CLIENT_ID,
     authority:
-      "https://login.microsoftonline.com/f7d86146-e286-4634-9d7a-d6b5a8a3fdec/",
+      "https://login.microsoftonline.com/" +
+      process.env.REACT_APP_AZURE_AD_APP_DIRECTORY_ID +
+      "/",
     redirectUri: "/",
     postLogoutRedirectUri: "/",
     navigateToLoginRequestUrl: true,
