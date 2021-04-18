@@ -23,25 +23,13 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-function createData(name, data) {
-  return { name, data };
-}
-
-const rows = [
-  createData("Busiest Day of Week", "Tuesday"),
-  createData("Most Customers in 1 Day", 247),
-  createData("Busiest Time of Day", "18:00"),
-  createData("Quietest Period of day", "07:00"),
-  createData("Average Number of Customers per Day", 178),
-];
-
 const useStyles = makeStyles({
   table: {
     minWidth: 300,
   },
 });
 
-export default function CustomizedTables() {
+export default function CustomizedTables(props) {
   const classes = useStyles();
 
   return (
@@ -54,7 +42,7 @@ export default function CustomizedTables() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {props.data.map((row) => (
             <StyledTableRow key={row.name}>
               <StyledTableCell component="th" scope="row">
                 {row.name}

@@ -7,9 +7,10 @@ import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import CapacityBar from "../components/CapacityBar";
 import Checkbox from "@material-ui/core/Checkbox";
+import Tooltip from "@material-ui/core/Tooltip";
 
+import CapacityBar from "../components/CapacityBar";
 import DevicesTable from "../components/DevicesTable";
 
 function Copyright() {
@@ -96,7 +97,12 @@ export default function ManageDevices() {
                 <CapacityBar current={data.current} max={data.max} />
               </Box>
               <Box alignSelf="center">
-                <Checkbox checked={enabled} onChange={handleEnable} />
+                <Tooltip
+                  title={(enabled ? "Disable" : "Enable") + " System"}
+                  aria-label={(enabled ? "disable" : "enable") + " system"}
+                >
+                  <Checkbox checked={enabled} onChange={handleEnable} />
+                </Tooltip>
               </Box>
             </Box>
             <DevicesTable />

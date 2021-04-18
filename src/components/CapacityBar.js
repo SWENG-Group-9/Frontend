@@ -12,6 +12,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const normalise = (value, max) => (value * 100) / max;
 
@@ -105,14 +106,17 @@ function CapacityBar(props) {
         alignItems="center"
         justifyContent="flex-end"
       >
-        <Typography
-          variant="subtitle1"
-          component="h6"
-          style={{ padding: "10px" }}
-          onClick={handleClickMaxOpen}
-        >
-          {current}/{max}
-        </Typography>
+        <Tooltip title="Set Max Value" aria-label="set max value">
+          <Button onClick={handleClickMaxOpen} style={{ height: 30 }}>
+            <Typography
+              variant="subtitle1"
+              component="h6"
+              style={{ padding: "2px" }}
+            >
+              {current}/{max}
+            </Typography>
+          </Button>
+        </Tooltip>
         <Dialog
           open={maxOpen}
           onClose={handleMaxOpenCancel}

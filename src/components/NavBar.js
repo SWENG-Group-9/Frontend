@@ -61,13 +61,19 @@ const SignInSignOut = () => {
     instance.logoutPopup();
   };
   return (
-    <IconButton
-      aria-label="account-tab"
-      className={classes.iconButton}
-      onClick={isAuthenticated ? handleLogout : handleLogin}
-    >
-      <AccountCircle />
-    </IconButton>
+    <>
+      <IconButton
+        aria-label="account-tab"
+        className={classes.iconButton}
+        onClick={isAuthenticated ? handleLogout : handleLogin}
+        color="primary"
+      >
+        <AccountCircle />
+      </IconButton>
+      <Typography className={classes.buttonText}>
+        {isAuthenticated ? "Logout" : "Login"}
+      </Typography>
+    </>
   );
 };
 
@@ -110,7 +116,15 @@ export default function HeadBar() {
             <Typography className={classes.buttonText}>View Data</Typography>
           </Button>
           <WelcomeName />
-          <SignInSignOut />
+          <Button
+            component={RouterLink}
+            to="/statistics"
+            color="secondary"
+            variant="contained"
+            className={classes.buttonStyle}
+          >
+            <SignInSignOut />
+          </Button>
         </Box>
       </Toolbar>
     </AppBar>

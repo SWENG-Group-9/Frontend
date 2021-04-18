@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -22,6 +22,9 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
+import Tooltip from "@material-ui/core/Tooltip";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,25 +33,50 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const tempDevices = [
-  {
-    name: "Front door",
-    type: "Entrance",
-  },
-  {
-    name: "Back door",
-    type: "Exit",
-  },
-];
-
 export default function DevicesTable() {
   const classes = useStyles();
-  const [locked, setLocked] = React.useState(["locked"]);
+  const [error, setError] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState("Error");
   const [addOpen, setAddOpen] = React.useState(false);
   const [deviceCodeOpen, setDeviceCodeOpen] = React.useState(false);
   const [type, setType] = React.useState("");
   const [name, setName] = React.useState("");
   const [deviceCode, setDeviceCode] = React.useState("");
+  const [devices, setDevices] = React.useState([]);
+
+  useEffect(() => {
+    const interval = setInterval(getData, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const getData = async () => {
+    try {
+      const getDevices = await axios.get(
+        process.env.REACT_APP_BACKEND_ENDPOINT + "/api/devices"
+      );
+      let tempDevices = [];
+      getDevices.data.forEach((element) => {
+        let deviceType = "Both";
+        if (element[2] === "in") {
+          deviceType = "Entrance";
+        } else if (element[2] === "out") {
+          deviceType = "Exit";
+        }
+
+        tempDevices.push({
+          name: element[0],
+          id: element[1],
+          type: deviceType,
+          status: element[3],
+          override: element[4],
+        });
+      });
+      setDevices(tempDevices);
+    } catch (error) {
+      setError(true);
+      setErrorMessage("Error getting devices.");
+    }
+  };
 
   const handleNameChange = (event) => {
     setName(event.target.value);
@@ -70,33 +98,47 @@ export default function DevicesTable() {
     setAddOpen(false);
     try {
       const addDevice = await axios.get(
-        process.env.REACT_APP_BACKEND_ENDPOINT + "/api/devices/" + name
+        process.env.REACT_APP_BACKEND_ENDPOINT +
+          "/api/devices/" +
+          name +
+          "/" +
+          type
       );
-      console.log(addDevice.data);
       setDeviceCodeOpen(true);
       setDeviceCode(addDevice.data);
       setName("");
-    } catch (error) {}
+      setType("");
+    } catch (error) {
+      setError(true);
+      setErrorMessage("Error adding device.");
+    }
   };
 
   const handleDeviceCodeClose = () => {
     setDeviceCodeOpen(false);
   };
 
-  const handleLock = (value) => () => {
-    const currentIndex = locked.indexOf(value);
-    const newLock = [...locked];
-
-    if (currentIndex === -1) {
-      newLock.push(value);
-    } else {
-      newLock.splice(currentIndex, 1);
-    }
-
-    setLocked(newLock);
+  const handleLock = async (device) => () => {
+    // handle override
   };
 
-  const handleDelete = (value) => {};
+  const handleDelete = async (id) => {
+    try {
+      const deleteDevice = await axios.delete(
+        process.env.REACT_APP_BACKEND_ENDPOINT + "/api/devices/" + id
+      );
+    } catch (error) {
+      setError(true);
+      setErrorMessage("Error deleting device.");
+    }
+  };
+
+  const handleErrorClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setError(false);
+  };
 
   return (
     <>
@@ -107,9 +149,11 @@ export default function DevicesTable() {
           </Typography>
         </Box>
         <Box>
-          <Fab color="primary" aria-label="add">
-            <AddIcon onClick={handleClickAddOpen} />
-          </Fab>
+          <Tooltip title="Add Device" aria-label="add device">
+            <Fab color="primary" aria-label="add">
+              <AddIcon onClick={handleClickAddOpen} />
+            </Fab>
+          </Tooltip>
         </Box>
       </Box>
 
@@ -140,9 +184,9 @@ export default function DevicesTable() {
             onChange={hadleTypeChange}
             fullWidth
           >
-            <MenuItem value={"Entrance"}>Entrance</MenuItem>
-            <MenuItem value={"Exit"}>Exit</MenuItem>
-            <MenuItem value={"Both"}>Both</MenuItem>
+            <MenuItem value={"in"}>Entrance</MenuItem>
+            <MenuItem value={"out"}>Exit</MenuItem>
+            <MenuItem value={"both"}>Both</MenuItem>
           </TextField>
         </DialogContent>
         <DialogActions>
@@ -178,8 +222,8 @@ export default function DevicesTable() {
 
       <Box flexGrow={1}>
         <List className={classes.root}>
-          {tempDevices.map((device, index) => (
-            <ListItem key={index}>
+          {devices.map((device) => (
+            <ListItem key={device.id}>
               <ListItemText
                 disableTypography
                 id="switch-list-label-entrance"
@@ -195,25 +239,49 @@ export default function DevicesTable() {
                 }
               />
               <ListItemSecondaryAction>
-                <IconButton
-                  edge="end"
-                  aria-label="LockIcon"
-                  onClick={handleLock(index)}
+                <Tooltip
+                  title="Override Device Lock"
+                  aria-label="override device lock"
                 >
-                  {locked.indexOf(index) !== -1 ? (
-                    <LockOutlinedIcon />
-                  ) : (
-                    <LockOpenOutlinedIcon />
-                  )}
-                </IconButton>
-                <IconButton onClick={handleDelete(index)}>
-                  <DeleteOutlineIcon />
-                </IconButton>
+                  <IconButton
+                    edge="end"
+                    aria-label="LockIcon"
+                    onClick={() => handleLock(device)}
+                    color={device.override ? "primary" : "default"}
+                  >
+                    {device.status ? (
+                      <LockOutlinedIcon />
+                    ) : (
+                      <LockOpenOutlinedIcon />
+                    )}
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Delete Device" aria-label="delete device">
+                  <IconButton onClick={() => handleDelete(device.id)}>
+                    <DeleteOutlineIcon />
+                  </IconButton>
+                </Tooltip>
               </ListItemSecondaryAction>
             </ListItem>
           ))}
         </List>
       </Box>
+
+      <Snackbar
+        open={error}
+        autoHideDuration={6000}
+        onClose={handleErrorClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleErrorClose}
+          severity="error"
+        >
+          {errorMessage}
+        </MuiAlert>
+      </Snackbar>
     </>
   );
 }
