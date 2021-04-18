@@ -23,24 +23,13 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-function createData(name, data) {
-  return { name, data };
-}
-
-const rows = [
-  createData("Doors in use", 2),
-  createData("Locked Doors", 2),
-  createData("Unlocked Doors in use", 2),
-  createData("Automatic Queing System in Use", "Yes"),
-];
-
 const useStyles = makeStyles({
   table: {
     minWidth: 100,
   },
 });
 
-export default function DoorStatisticsTable() {
+export default function DoorStatisticsTable(props) {
   const classes = useStyles();
 
   return (
@@ -53,7 +42,7 @@ export default function DoorStatisticsTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {props.data.map((row) => (
             <StyledTableRow key={row.name}>
               <StyledTableCell component="th" scope="row">
                 {row.name}

@@ -7,6 +7,25 @@ import StatCharts from "../components/StatCharts";
 import SummaryStatsTable from "../components/SummaryStatsTable";
 import DoorStatisticsTable from "../components/DoorStatisticsTable";
 
+function createData(name, data) {
+  return { name, data };
+}
+
+const tempSummaryTable = [
+  createData("Busiest Day of Week", "Wenesday"),
+  createData("Most Customers in 1 Day", 247),
+  createData("Busiest Time of Day", "18:00"),
+  createData("Quietest Period of day", "07:00"),
+  createData("Average Number of Customers per Day", 178),
+];
+
+const tempDoorStatistics = [
+  createData("Doors in use", 2),
+  createData("Locked Doors", 2),
+  createData("Unlocked Doors in use", 2),
+  createData("Automatic Queing System in Use", "Yes"),
+];
+
 export default function AppStatistics() {
   const [times, setTimes] = useState([]);
   const [values, setValues] = useState([]);
@@ -22,7 +41,7 @@ export default function AppStatistics() {
   function fetchData(mode, date, start, end) {
     setLoading(true);
     setDateL(date);
-    fetch("http://localhost:8000/" + date)
+    fetch(process.env.REACT_APP_BACKEND_ENDPOINT + "/api/stats/" + date)
       .then((resp) => {
         console.log(resp);
         if (!resp.ok) {
@@ -110,10 +129,10 @@ export default function AppStatistics() {
           />
         </Grid>
         <Grid item xs={5} sm={5} container spacing={40}>
-          <SummaryStatsTable />
+          <SummaryStatsTable data={tempSummaryTable} />
         </Grid>
         <Grid item xs={6} sm={6} container spacing={40}>
-          <DoorStatisticsTable />
+          <DoorStatisticsTable data={tempDoorStatistics} />
         </Grid>
       </Grid>
     </Container>
