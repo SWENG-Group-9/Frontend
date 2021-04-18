@@ -23,6 +23,8 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DevicesTable() {
   const classes = useStyles();
+  const [error, setError] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState("Error");
   const [addOpen, setAddOpen] = React.useState(false);
   const [deviceCodeOpen, setDeviceCodeOpen] = React.useState(false);
   const [type, setType] = React.useState("");
@@ -68,7 +72,10 @@ export default function DevicesTable() {
         });
       });
       setDevices(tempDevices);
-    } catch (error) {}
+    } catch (error) {
+      setError(true);
+      setErrorMessage("Error getting devices.");
+    }
   };
 
   const handleNameChange = (event) => {
@@ -101,7 +108,10 @@ export default function DevicesTable() {
       setDeviceCode(addDevice.data);
       setName("");
       setType("");
-    } catch (error) {}
+    } catch (error) {
+      setError(true);
+      setErrorMessage("Error adding device.");
+    }
   };
 
   const handleDeviceCodeClose = () => {
@@ -117,7 +127,17 @@ export default function DevicesTable() {
       const deleteDevice = await axios.delete(
         process.env.REACT_APP_BACKEND_ENDPOINT + "/api/devices/" + id
       );
-    } catch (error) {}
+    } catch (error) {
+      setError(true);
+      setErrorMessage("Error deleting device.");
+    }
+  };
+
+  const handleErrorClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setError(false);
   };
 
   return (
@@ -246,6 +266,22 @@ export default function DevicesTable() {
           ))}
         </List>
       </Box>
+
+      <Snackbar
+        open={error}
+        autoHideDuration={6000}
+        onClose={handleErrorClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleErrorClose}
+          severity="error"
+        >
+          {errorMessage}
+        </MuiAlert>
+      </Snackbar>
     </>
   );
 }
