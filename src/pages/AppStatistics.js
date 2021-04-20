@@ -51,6 +51,7 @@ export default function AppStatistics() {
         return resp.json();
       })
       .then((rawData) => {
+        rawData = rawData[date];
         let dateS = date.split("-");
         let startS = start.split(":");
         let endS = end.split(":");
