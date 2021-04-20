@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 import { Container, Grid } from "@material-ui/core";
 
@@ -10,21 +11,6 @@ function createData(name, data) {
   return { name, data };
 }
 
-const tempSummaryTable = [
-  createData("Busiest Day of Week", "Wenesday"),
-  createData("Most Customers in 1 Day", 247),
-  createData("Busiest Time of Day", "18:00"),
-  createData("Quietest Period of day", "07:00"),
-  createData("Average Number of Customers per Day", 178),
-];
-
-const tempDoorStatistics = [
-  createData("Doors in use", 2),
-  createData("Locked Doors", 2),
-  createData("Unlocked Doors in use", 2),
-  createData("Automatic Queing System in Use", "Yes"),
-];
-
 export default function AppStatistics() {
   const [times, setTimes] = useState([]);
   const [values, setValues] = useState([]);
@@ -33,27 +19,112 @@ export default function AppStatistics() {
   const [loading, setLoading] = useState(true);
   const [dateL, setDateL] = useState("");
   const [doorStatistics, setDoorStatistics] = useState([]);
+  const [summaryStats, setSummaryStats] = useState([]);
 
   useEffect(() => {
     getDoorStatistics();
+    getSummaryStatistics();
     getPeriodDataValues();
   }, [loading]);
 
-  async function getDoorStatistics() {
+  const getDoorStatistics = async () => {
     try {
       const getDevices = await axios.get(
         process.env.REACT_APP_BACKEND_ENDPOINT + "/api/devices"
       );
-      console.log(getDevices)
-    } catch (e) {}
+      let lockedDoors = 0;
+      getDevices.data.forEach((device) => {
+        if (device[3]) {
+          lockedDoors = lockedDoors + 1;
+        }
+      });
+
+      const tempDoorStatistics = [
+        createData("Doors in use", getDevices.data.length),
+        createData("Locked Doors", lockedDoors),
+        createData(
+          "Unlocked Doors in use",
+          getDevices.data.length - lockedDoors
+        ),
+        // createData("Automatic Queing System in Use", "Yes"),
+      ];
+      setDoorStatistics(tempDoorStatistics);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  function highestOccurence(arr) {
+    return arr
+      .sort(
+        (a, b) =>
+          arr.filter((v) => v === a).length - arr.filter((v) => v === b).length
+      )
+      .pop();
   }
+
+  const getSummaryStatistics = async () => {
+    try {
+      const getStats = await axios.get(
+        process.env.REACT_APP_BACKEND_ENDPOINT + "/api/stats"
+      );
+
+      let mostCustomersOneDay = 0;
+      let averageCustomers = 0;
+      let busiestDays = [];
+      let quietestDays = [];
+      Object.entries(getStats.data).forEach(([date, times]) => {
+        let totalCustomers = 0;
+        let busiest = {
+          time: "00:00",
+          value: 0,
+        };
+        let quietest = {
+          time: "00:00",
+          value: Number.MAX_VALUE,
+        };
+
+        times.forEach((time) => {
+          totalCustomers = totalCustomers + time.value;
+          if (time.value >= busiest.value) {
+            busiest = time;
+          }
+          if (time.value <= quietest.value) {
+            quietest = time;
+          }
+        });
+        averageCustomers = averageCustomers + totalCustomers;
+        busiestDays.push(busiest.time);
+        quietestDays.push(quietest.time);
+
+        if (mostCustomersOneDay < totalCustomers) {
+          mostCustomersOneDay = totalCustomers;
+        }
+      });
+      averageCustomers =
+        averageCustomers / Object.entries(getStats.data).length;
+
+      const tempSummaryTable = [
+        createData("Most Customers in 1 Day", mostCustomersOneDay),
+        createData("Busiest Time of Day", highestOccurence(busiestDays)),
+        createData("Quietest Time of day", highestOccurence(quietestDays)),
+        createData(
+          "Average Number of Customers per Day",
+          Math.round(averageCustomers)
+        ),
+      ];
+      setSummaryStats(tempSummaryTable);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   function fetchData(mode, date, start, end) {
     setLoading(true);
     setDateL(date);
     fetch(process.env.REACT_APP_BACKEND_ENDPOINT + "/api/stats/" + date)
       .then((resp) => {
-        console.log(resp);
+        // console.log(resp);
         if (!resp.ok) {
           setFound(false);
           throw Error("Could not find data for this period");
@@ -86,7 +157,7 @@ export default function AppStatistics() {
           time.setMinutes(time.getMinutes() + mode);
         }
 
-        console.log(timesar);
+        // console.log(timesar);
 
         let dataobj = [];
         timesar.forEach((item) => {
@@ -140,13 +211,10 @@ export default function AppStatistics() {
           />
         </Grid>
         <Grid item xs={5} sm={5} container spacing={40}>
-          <StatsTable title="Summary Statistics" data={tempSummaryTable} />
+          <StatsTable title="Summary Statistics" data={summaryStats} />
         </Grid>
         <Grid item xs={6} sm={6} container spacing={40}>
-          <StatsTable
-            title="Door Summary Statistics"
-            data={tempDoorStatistics}
-          />
+          <StatsTable title="Door Summary Statistics" data={doorStatistics} />
         </Grid>
       </Grid>
     </Container>
