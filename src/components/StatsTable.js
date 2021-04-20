@@ -37,7 +37,7 @@ export default function CustomizedTables(props) {
       <Table className={classes.table} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Summary Statistics</StyledTableCell>
+            <StyledTableCell>{props.title}</StyledTableCell>
             <StyledTableCell align="right"></StyledTableCell>
           </TableRow>
         </TableHead>

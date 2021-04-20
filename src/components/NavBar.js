@@ -117,8 +117,6 @@ export default function HeadBar() {
           </Button>
           <WelcomeName />
           <Button
-            component={RouterLink}
-            to="/statistics"
             color="secondary"
             variant="contained"
             className={classes.buttonStyle}
