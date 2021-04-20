@@ -4,8 +4,7 @@ import { Container, Grid } from "@material-ui/core";
 
 import ChartControl from "../components/ChartControl";
 import StatCharts from "../components/StatCharts";
-import SummaryStatsTable from "../components/SummaryStatsTable";
-import DoorStatisticsTable from "../components/DoorStatisticsTable";
+import StatsTable from "../components/StatsTable";
 
 function createData(name, data) {
   return { name, data };
@@ -33,10 +32,21 @@ export default function AppStatistics() {
   const [found, setFound] = useState(false);
   const [loading, setLoading] = useState(true);
   const [dateL, setDateL] = useState("");
+  const [doorStatistics, setDoorStatistics] = useState([]);
 
   useEffect(() => {
+    getDoorStatistics();
     getPeriodDataValues();
   }, [loading]);
+
+  async function getDoorStatistics() {
+    try {
+      const getDevices = await axios.get(
+        process.env.REACT_APP_BACKEND_ENDPOINT + "/api/devices"
+      );
+      console.log(getDevices)
+    } catch (e) {}
+  }
 
   function fetchData(mode, date, start, end) {
     setLoading(true);
@@ -130,10 +140,13 @@ export default function AppStatistics() {
           />
         </Grid>
         <Grid item xs={5} sm={5} container spacing={40}>
-          <SummaryStatsTable data={tempSummaryTable} />
+          <StatsTable title="Summary Statistics" data={tempSummaryTable} />
         </Grid>
         <Grid item xs={6} sm={6} container spacing={40}>
-          <DoorStatisticsTable data={tempDoorStatistics} />
+          <StatsTable
+            title="Door Summary Statistics"
+            data={tempDoorStatistics}
+          />
         </Grid>
       </Grid>
     </Container>
