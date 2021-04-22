@@ -1,6 +1,6 @@
 {
-  "name": "frontend",
-  "version": "0.1.1",
+  "name": "sweng-group9-frontend",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
