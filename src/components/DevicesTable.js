@@ -97,7 +97,7 @@ export default function DevicesTable() {
   const handleAdd = async () => {
     setAddOpen(false);
     try {
-      const addDevice = await axios.get(
+      const addDevice = await axios.post(
         process.env.REACT_APP_BACKEND_ENDPOINT +
           "/api/devices/" +
           name +
@@ -109,6 +109,7 @@ export default function DevicesTable() {
       setName("");
       setType("");
     } catch (error) {
+      console.log(error);
       setError(true);
       setErrorMessage("Error adding device.");
     }
@@ -118,8 +119,15 @@ export default function DevicesTable() {
     setDeviceCodeOpen(false);
   };
 
-  const handleLock = async (device) => () => {
-    // handle override
+  const handleLock = async (device) => {
+    try {
+      const lockDoor = await axios.put(
+        process.env.REACT_APP_BACKEND_ENDPOINT + "/api/door/" + device.id
+      );
+    } catch (error) {
+      setError(true);
+      setErrorMessage("Error overriding door lock.");
+    }
   };
 
   const handleDelete = async (id) => {
@@ -240,7 +248,11 @@ export default function DevicesTable() {
               />
               <ListItemSecondaryAction>
                 <Tooltip
-                  title="Override Device Lock"
+                  title={
+                    device.status
+                      ? "Override Device Unlock"
+                      : "Override Device Lock"
+                  }
                   aria-label="override device lock"
                 >
                   <IconButton
