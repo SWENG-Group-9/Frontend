@@ -1,6 +1,6 @@
 # IoT Pandemic Saftey Suite Frontend
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/SWENG-Group-9/Frontend/deploy-to-azure) ![GitHub](https://img.shields.io/github/license/SWENG-Group-9/Frontend) ![Website](https://img.shields.io/website?down_color=lightgrey&down_message=offiline&label=deployment&up_color=blue&up_message=online&url=https%3A%2F%2Fpandemicsafetysuite.azurewebsites.net%2F)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/SWENG-Group-9/Frontend/deploy-to-azure) ![Website](https://img.shields.io/website?down_color=lightgrey&down_message=offiline&label=deployment&up_color=blue&up_message=online&url=https%3A%2F%2Fpandemicsafetysuite.azurewebsites.net%2F)
 
 Deployed on [pandemicsafetysuite.azurewebsites.net](https://pandemicsafetysuite.azurewebsites.net).
 
