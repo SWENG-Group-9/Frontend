@@ -34,8 +34,19 @@ export default function ManageDevices() {
   });
   const [enabled, setEnabled] = useState(true);
 
-  const handleEnable = (event) => {
-    setEnabled(event.target.checked);
+  const handleEnable = async (event) => {
+    try {
+      let disable = 0;
+      if (event.target.checked) {
+        disable = 1;
+      }
+
+      const enable = await axios.post(
+        process.env.REACT_APP_BACKEND_ENDPOINT + "/api/door/" + disable
+      );
+
+      console.log(enable);
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -53,6 +64,12 @@ export default function ManageDevices() {
         process.env.REACT_APP_BACKEND_ENDPOINT + "/api/max"
       );
 
+      const enable = await axios.get(
+        process.env.REACT_APP_BACKEND_ENDPOINT + "/api/door"
+      );
+
+      setEnabled(enable.data);
+
       setData({
         current: current.data,
         max: max.data,
@@ -62,6 +79,7 @@ export default function ManageDevices() {
       setError(true);
     }
   };
+
   if (error) {
     return (
       <Grid
