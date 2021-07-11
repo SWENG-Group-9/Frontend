@@ -39,7 +39,7 @@ There is a public view that can be accessed by any computer view URL and therefo
 
 1. Install [Node.js](https://nodejs.org)
 2. Clone this repository
-3. Open up command prompt or teminal and navigate to the location of the cloned repository
+3. Open up command prompt or terminal and navigate to the location of the cloned repository
 4. Install the dependencies
 
    ```Shell Session
